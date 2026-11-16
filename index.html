@@ -1,0 +1,1930 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0d0b15">
+  <meta name="description" content="A browser-only save editor and checkpoint workbench for the original PC release of UNDERTALE.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-tfsWa51k6FgLwQT3IdDF5fmNbuyiGI+bboVuRiKQyUw=' 'sha256-wj+5RZ+OTBmM/50zjYRkIA8zIP9mpwC7iShUfDneAcI=' 'sha256-yut5no7hrvDuvCsudkGNeoBwAeaJPfd9cEYlYMjj8Gg='; style-src 'sha256-9tte2t2tIN4qMgMbxa0n+7qdu5SG/eykH82t0jFxmr8='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>SAVEPOINT — UNDERTALE Save Editor</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzI1MTkzMyIvPgogIDxwYXRoIGQ9Ik0xNCA1aDR2N2gydjJoN3Y0aC03djJoLTJ2N2gtNHYtN2gtMnYtMkg1di00aDd2LTJoMnoiIGZpbGw9IiNmNGNhN2IiLz4KPC9zdmc+Cg==" type="image/svg+xml">
+  <style>:root {
+  color-scheme: dark;
+  --bg: #0d0b15;
+  --surface: #15111f;
+  --raised: #1c1629;
+  --line: #372b46;
+  --soft-line: #2a2236;
+  --text: #f1edf6;
+  --muted: #bdb1cb;
+  --accent: #f4ca7b;
+  --accent-hover: #ffe3aa;
+  --lavender: #c6a6f5;
+  --green: #9ad6b1;
+  --warn: #ffd192;
+  --danger: #ffacae;
+  --mono: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font: 15px/1.55 var(--sans);
+  color: var(--text);
+  background: var(--bg);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: 20px; }
+body { margin: 0; min-width: 280px; background: radial-gradient(ellipse at 75% 2%, #211530 0, transparent 36rem), var(--bg); }
+button, input, select { font: inherit; }
+button, a, input, select, summary { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+a { color: var(--lavender); }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+[hidden], .symbols { display: none !important; }
+h1, h2, h3, p { margin: 0; }
+code { font: .92em var(--mono); color: #e4d6f4; overflow-wrap: anywhere; }
+.icon { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+.wrap { width: min(1152px, calc(100% - 72px)); margin-inline: auto; }
+.skip { position: absolute; z-index: 5; left: 14px; top: 12px; transform: translateY(-160%); padding: 8px 12px; background: var(--surface); }
+.skip:focus { transform: none; }
+.site-head { border-bottom: 1px solid var(--soft-line); background: #0e0c16d9; }
+.header-inner, .header-actions, .brand { display: flex; align-items: center; }
+.header-inner { min-height: 77px; justify-content: space-between; gap: 18px; }
+.brand { gap: 11px; color: var(--text); text-decoration: none; font: 700 16px/1.12 var(--mono); letter-spacing: .12em; }
+.brand small { display: block; font: 600 9px/1.3 var(--mono); letter-spacing: .12em; color: var(--muted); margin-top: 5px; }
+.brand-mark, .mode-icon, .upload-mark { display: grid; place-items: center; flex: none; }
+.brand-mark { width: 40px; height: 40px; color: var(--accent); border: 1px solid #503a50; border-radius: 9px; background: #271c31; box-shadow: inset 0 0 14px #f4ca7b0c; }
+.header-actions { gap: 20px; }
+.privacy { display: inline-flex; align-items: center; gap: 9px; padding: 7px 11px; border: 1px solid #314339; border-radius: 5px; background: #18221e; color: var(--green); font: 700 10px var(--mono); letter-spacing: .1em; white-space: nowrap; }
+.light { display: inline-block; width: 7px; height: 7px; border-radius: 2px; background: currentColor; box-shadow: 0 0 9px #9ad6b168; flex: none; }
+.header-link { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 600; }
+.header-link:hover, .recovery a:hover { color: var(--accent); }
+.header-link span { margin-left: 4px; color: var(--lavender); }
+.hero { margin-top: 29px; min-height: 245px; border: 1px solid #443453; border-radius: 13px; isolation: isolate; overflow: hidden; position: relative; display: flex; align-items: center; background: linear-gradient(105deg, #151020, #1a1228 76%, #20162e); }
+.hero-text { padding: 34px 44px 39px; max-width: 660px; position: relative; z-index: 1; }
+.eyebrow { color: var(--lavender); font: 700 11px/1.4 var(--mono); letter-spacing: .13em; display: flex; align-items: center; gap: 8px; }
+.hero .eyebrow { color: #d3bde7; }
+.hero .eyebrow > span:first-child { width: 13px; height: 2px; background: var(--accent); }
+.slash { color: #907a9f; }
+.hero h1 { font: 750 clamp(2.8rem, 6vw, 4.55rem)/1.04 var(--sans); letter-spacing: -.073em; margin: 8px 0 14px; }
+.hero h1 span { color: var(--accent); }
+.hero p:last-child { max-width: 445px; color: #c9bdd6; font-size: 15px; line-height: 1.62; }
+.landscape { position: absolute; right: 0; top: 0; height: 100%; width: auto; z-index: -1; }
+.hero-index { position: absolute; right: 18px; bottom: 13px; color: #a992bd; font: 700 9px var(--mono); letter-spacing: .15em; }
+.progress { margin: 22px 0 19px; border: 1px solid var(--soft-line); border-radius: 9px; background: #120e1b; overflow: hidden; }
+.progress ol { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); padding: 0; margin: 0; }
+.progress li + li { border-left: 1px solid var(--soft-line); }
+.progress button { display: flex; gap: 11px; align-items: center; justify-content: center; border: 0; border-bottom: 2px solid transparent; width: 100%; min-height: 53px; background: transparent; color: var(--muted); font-weight: 650; }
+.progress button:hover:not(:disabled) { background: #21172c; }
+.progress button:focus-visible { outline-offset: -5px; }
+.progress button[aria-current] { color: var(--accent); background: #261b2c; border-bottom-color: var(--accent); }
+.progress button:disabled { color: #a194ae; }
+.step-num { font: 700 10px var(--mono); letter-spacing: .03em; border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; }
+.progress button[aria-current] .step-num { border-color: #76563e; background: #3e2b31; }
+.work-grid { display: grid; grid-template-columns: minmax(0, 1fr) 302px; gap: 17px; align-items: start; }
+.work-card, .side-card { background: var(--surface); border: 1px solid var(--line); border-radius: 11px; }
+.work-card { padding: 28px; min-width: 0; }
+.section-head { margin-bottom: 21px; }
+.section-head h2 { margin-top: 5px; font-size: clamp(1.6rem, 4vw, 2rem); line-height: 1.2; letter-spacing: -.045em; outline: none; }
+.section-head p:last-child { margin-top: 6px; color: var(--muted); }
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+.mode-card { display: flex; align-items: center; width: 100%; min-height: 77px; text-align: left; padding: 12px; gap: 11px; color: var(--text); background: #191424; border: 1px solid #3b2d4b; border-radius: 8px; }
+.mode-card:hover { background: #241a31; border-color: #7d6594; }
+.mode-card[aria-pressed="true"] { background: #2a1d32; border-color: #b88e63; box-shadow: inset 0 0 0 1px #b88e631e; }
+.mode-icon { width: 35px; height: 35px; border-radius: 6px; background: #2a203a; color: var(--lavender); border: 1px solid #49375d; }
+.mode-card[aria-pressed="true"] .mode-icon { background: #41303b; border-color: #6c504e; color: var(--accent); }
+.mode-copy { min-width: 0; }
+.mode-copy strong, .mode-copy small { display: block; }
+.mode-copy strong { line-height: 1.2; font-size: 14px; }
+.mode-copy small { font-size: 11px; line-height: 1.3; color: var(--muted); margin-top: 5px; }
+.radio-dot { display: grid; place-items: center; width: 14px; height: 14px; border-radius: 50%; border: 1px solid #846d96; flex: none; margin-left: auto; }
+.mode-card[aria-pressed="true"] .radio-dot { border-color: var(--accent); }
+.mode-card[aria-pressed="true"] .radio-dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.drop-zone { min-height: 172px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 5px; background: #110e1b; border: 1px dashed #5d496e; border-radius: 8px; padding: 16px 10px; }
+.drop-zone.drag { background: #2a1d36; border-color: var(--accent); }
+.drop-zone > span:not(.upload-mark) { color: var(--muted); font-size: 13px; }
+.drop-zone .button-row { margin-top: 7px; justify-content: center; }
+.upload-mark { width: 34px; height: 34px; border: 1px solid #48355e; border-radius: 6px; color: var(--lavender); background: #241931; margin-bottom: 4px; }
+.upload-mark .icon { width: 17px; height: 17px; }
+.button-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.button { display: inline-flex; gap: 8px; min-height: 41px; align-items: center; justify-content: center; text-align: center; padding: 8px 13px; border: 1px solid #4a385e; border-radius: 6px; background: #251b33; color: #e9dcf7; font-size: 13px; font-weight: 650; text-decoration: none; }
+.button .icon { width: 16px; height: 16px; }
+.button.compact { min-height: 34px; padding: 6px 10px; font-size: 12px; }
+.button.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.button:hover:not(:disabled) { background: #342448; border-color: #9572ad; color: var(--text); }
+.button.primary { color: #261811; background: var(--accent); border-color: var(--accent); }
+.button.primary:hover:not(:disabled) { color: #261811; background: var(--accent-hover); border-color: var(--accent-hover); }
+.button:disabled { opacity: .55; }
+.button.primary:disabled { opacity: 1; color: #c6a47a; background: #3b2b2b; border-color: #574237; }
+.files { list-style: none; padding: 0; margin: 0; }
+.files li { display: flex; align-items: center; gap: 8px; padding: 9px 2px; border-bottom: 1px solid var(--soft-line); }
+.files li .icon { width: 15px; height: 15px; color: var(--green); }
+.files li button { margin-left: auto; }
+.section-actions { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 17px; }
+.section-actions > :last-child { margin-left: auto; }
+.side { display: grid; gap: 13px; }
+.side-card { padding: 19px; }
+.side-card .eyebrow { font-size: 10px; }
+.status-card .light { color: var(--green); }
+.side-card h3 { margin-top: 5px; font-size: 16px; letter-spacing: -.025em; }
+.side-card p:not(.eyebrow), .side-card li { color: var(--muted); font-size: 13px; line-height: 1.52; }
+.side-card p:not(.eyebrow) { margin-top: 4px; }
+.status-rows { margin-top: 14px; border-top: 1px solid var(--soft-line); }
+.status-rows > div { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding-top: 8px; font-size: 12px; }
+.status-rows > div > span { color: var(--muted); }
+.status-rows > div > .loaded { color: var(--green); }
+.privacy-card { display: flex; align-items: flex-start; gap: 11px; background: #16121f; }
+.privacy-card > .icon { color: var(--green); margin-top: 3px; }
+.privacy-card h3 { margin-top: 0; font-size: 14px; }
+.recovery ol { margin: 8px 0 12px; padding-left: 20px; }
+.recovery li + li { margin-top: 4px; }
+.recovery a { display: inline-block; margin-top: 11px; color: var(--lavender); font-size: 12px; font-weight: 650; text-decoration: none; }
+.paths { display: grid; gap: 1px; margin: 0 0 11px; padding: 9px 10px; background: #0e0c16; border: 1px solid var(--soft-line); border-radius: 5px; }
+.paths dt { font-size: 11px; font-weight: 650; color: var(--muted); }
+.paths dd { margin: 0 0 4px; line-height: 1.3; font-size: 12px; }
+.footer { display: flex; justify-content: space-between; gap: 10px; border-top: 1px solid var(--soft-line); margin-top: 24px; padding: 15px 0 21px; color: var(--muted); font-size: 11px; }
+.footer > span:first-child { font: 650 10px/1.55 var(--mono); letter-spacing: .06em; }
+.footer .icon { width: 12px; height: 12px; color: var(--accent); margin-right: 3px; }
+.form-message { color: var(--green); font-size: 13px; margin-top: 9px; }
+.form-message:empty { display: none; }
+.form-message.error, .field-error { color: var(--danger); }
+.notice { display: flex; gap: 10px; align-items: flex-start; border: 1px solid #49375b; border-radius: 7px; padding: 12px; background: #21172e; margin-bottom: 14px; }
+.notice .icon { color: var(--lavender); margin-top: 2px; width: 17px; height: 17px; }
+.notice strong { font-size: 13px; }
+.notice p { font-size: 12px; line-height: 1.5; color: var(--muted); margin-top: 2px; }
+.notice.caution { border-color: #604735; background: #2a1d21; }
+.notice.caution .icon { color: var(--warn); }
+.notice.good { border-color: #385645; background: #18251f; }
+.notice.good .icon { color: var(--green); }
+.checkpoint-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.checkpoint-list { display: grid; gap: 7px; margin-bottom: 13px; }
+.checkpoint { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid var(--soft-line); background: #171222; border-radius: 6px; padding: 9px 10px; }
+.checkpoint h3 { font-size: 14px; }
+.checkpoint p { color: var(--muted); font-size: 12px; }
+.checkpoint .eyebrow { font-size: 9px; color: #bf9cdb; }
+.tag { flex: none; padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font: 650 10px/1.4 var(--mono); }
+.tag.good { color: var(--green); border-color: #385645; }
+.help-text { color: var(--muted); font-size: 13px; margin: 5px 0 11px; }
+.edit-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+.edit-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.edit-nav a { color: var(--lavender); font-size: 12px; text-decoration: none; padding: 5px 8px; border: 1px solid var(--line); border-radius: 4px; background: #1a1425; }
+.edit-nav a:hover { border-color: var(--lavender); }
+.editor-section { border-top: 1px solid var(--soft-line); padding: 15px 0; }
+.editor-section h3 { margin-bottom: 7px; font-size: 16px; }
+.field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 12px; }
+#capture-custom { grid-column: 1 / -1; }
+.checkpoint .advanced { margin-top: 8px; }
+#personal-checkpoints { margin-bottom: 12px; }
+.field { display: block; margin: 8px 0 11px; }
+label { color: #e6dbf2; font-size: 12px; font-weight: 650; }
+label small, .field-help { display: block; color: var(--muted); font-size: 11px; font-weight: 400; line-height: 1.4; margin-top: 4px; }
+input:not([type="checkbox"]), select { display: block; width: 100%; min-height: 38px; margin-top: 4px; padding: 7px 9px; color: var(--text); border: 1px solid #493858; border-radius: 5px; background: #100d18; font-size: 13px; }
+input[type="file"] { padding: 5px; }
+input[type="file"]::file-selector-button { color: var(--text); background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 4px 7px; margin-right: 6px; }
+input::placeholder { color: #a091ad; }
+input[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--danger); }
+input:disabled { opacity: .65; }
+.control-row { display: flex; align-items: flex-end; gap: 4px; }
+.control-row > :first-child { min-width: 0; }
+.control-row button { min-width: 34px; min-height: 38px; padding: 5px; }
+.field-error { display: block; font-size: 11px; line-height: 1.4; margin-top: 4px; }
+.checkbox { display: flex; gap: 7px; align-items: flex-start; margin: 12px 0; }
+.checkbox input { width: 15px; height: 15px; accent-color: var(--accent); flex: none; margin: 3px 0 0; }
+.advanced { border: 1px solid var(--line); border-radius: 7px; margin-top: 9px; background: #130f1e; }
+.advanced summary { display: flex; justify-content: space-between; align-items: center; padding: 9px 11px; cursor: pointer; list-style: none; color: #eadcf8; font-size: 13px; font-weight: 650; }
+.advanced summary::-webkit-details-marker { display: none; }
+.advanced summary .icon { color: var(--lavender); width: 17px; height: 17px; }
+.advanced[open] > summary .icon { transform: rotate(180deg); }
+.details-inner { padding: 0 11px 12px; }
+.slot-tools { display: flex; gap: 4px; margin-top: 4px; }
+.slot-tools .button { min-height: 28px; padding: 3px 6px; }
+.report-list { margin: 6px 0 15px; padding-left: 19px; color: var(--muted); font-size: 13px; }
+.report-list li + li { margin-top: 4px; }
+.report-list.conflicts { color: var(--danger); }
+#diff-report { margin-top: 15px; }
+.diff { width: 100%; border-collapse: collapse; margin-top: 9px; font-size: 12px; table-layout: fixed; }
+.diff th, .diff td { border-bottom: 1px solid var(--soft-line); padding: 7px 4px; text-align: left; overflow-wrap: anywhere; vertical-align: top; }
+.diff th { color: var(--muted); }
+.diff th:first-child { width: 44%; }
+.download-grid { display: grid; gap: 8px; }
+.download-row { display: flex; justify-content: space-between; align-items: center; gap: 9px; padding: 9px; border: 1px solid var(--soft-line); border-radius: 6px; }
+.download-row strong { font-size: 13px; }
+.download-row p { font-size: 11px; color: var(--muted); }
+.download-row .button-row { justify-content: flex-end; }
+.noscript { padding: 15px; text-align: center; color: var(--danger); }
+@media (max-width: 920px) {
+  .wrap { width: calc(100% - 42px); }
+  .work-grid { grid-template-columns: minmax(0, 1fr) 249px; }
+  .work-card { padding: 21px; }
+  .mode-card { gap: 8px; padding: 9px; }
+  .side-card { padding: 15px; }
+}
+@media (max-width: 710px) {
+  .work-grid { grid-template-columns: 1fr; }
+  .side { grid-template-columns: 1fr 1fr; }
+  .recovery { grid-column: 1 / -1; }
+  .hero-text { padding: 28px; }
+  .hero { min-height: 214px; margin-top: 18px; }
+  .landscape { right: -55px; opacity: .54; }
+  .hero-index { display: none; }
+  .progress { margin: 14px 0; }
+}
+@media (max-width: 440px) {
+  .wrap { width: calc(100% - 24px); }
+  .header-inner { min-height: 61px; gap: 7px; }
+  .header-actions { gap: 7px; }
+  .brand { gap: 6px; font-size: 13px; }
+  .brand small { font-size: 7px; }
+  .brand-mark { width: 30px; height: 30px; }
+  .brand-mark .icon { width: 15px; height: 15px; }
+  .privacy { font-size: 8px; padding: 5px 6px; gap: 5px; }
+  .privacy .light { width: 5px; height: 5px; }
+  .header-link { font-size: 11px; }
+  .header-link span { display: none; }
+  .hero-text { padding: 19px; }
+  .hero { min-height: 196px; }
+  .landscape { right: -100px; opacity: .37; }
+  .progress button { font-size: 11px; min-height: 44px; gap: 4px; }
+  .step-num { font-size: 9px; padding: 2px 3px; }
+  .work-card { padding: 14px; }
+  .mode-grid { grid-template-columns: 1fr; gap: 7px; }
+  .mode-card { min-height: 58px; }
+  .field-grid { grid-template-columns: 1fr; }
+  .side { grid-template-columns: 1fr; }
+  .checkpoint, .download-row { align-items: flex-start; flex-wrap: wrap; }
+  .footer { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="spark" viewBox="0 0 24 24"><path d="M10 2h4v6h2v2h6v4h-6v2h-2v6h-4v-6H8v-2H2v-4h6V8h2z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="shield" viewBox="0 0 24 24"><path d="M12 22s7-3.5 7-10V5l-7-3-7 3v7c0 6.5 7 10 7 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="folder" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/><path d="M3 10h18"/></symbol>
+    <symbol id="file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h4M9 12h6m-6 4h6"/></symbol>
+    <symbol id="upload" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M4 14v6h16v-6"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="icon-undo" viewBox="0 0 24 24"><path d="M8 7 4 11l4 4M4 11h11a4 4 0 0 1 0 8h-2"/></symbol>
+    <symbol id="alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3Zm0 6v4m0 3v.2"/></symbol>
+    <symbol id="layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></symbol>
+    <symbol id="chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
+  </svg>
+  <a class="skip" href="#workbench">Skip to the editor</a>
+  <header class="site-head">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="Savepoint home">
+        <span class="brand-mark"><svg class="icon"><use href="#spark"/></svg></span>
+        <span>SAVEPOINT<small>UNDERTALE SAVE EDITOR</small></span>
+      </a>
+      <div class="header-actions">
+        <span class="privacy"><span class="light"></span> LOCAL PROCESSING</span>
+        <a class="header-link" href="#recovery">Help <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </header>
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-text">
+        <p class="eyebrow"><span></span> ORIGINAL UNDERTALE <span class="slash">/</span> PC</p>
+        <h1 id="page-title">Save editor<span>.</span></h1>
+        <p>Edit your stats, items and story flags, or generate a save from a built-in checkpoint. Your save files stay in your browser.</p>
+      </div>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NDUgMjQ0IiBzaGFwZS1yZW5kZXJpbmc9ImNyaXNwRWRnZXMiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJmYWRlIj48c3RvcCBzdG9wLWNvbG9yPSIjMTUxMDI0IiBzdG9wLW9wYWNpdHk9IjAiLz48c3RvcCBvZmZzZXQ9Ii4zNSIgc3RvcC1jb2xvcj0iIzIxMTYzMyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzFhMTEyOSIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdyb3VuZCIgeDI9IjAiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjNDkzMTVlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMWMxNDJjIi8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iZ2xvdyI+PHN0b3Agc3RvcC1jb2xvcj0iI2U2YWI3MyIgc3RvcC1vcGFjaXR5PSIuMjYiLz48c3RvcCBvZmZzZXQ9Ii42NSIgc3RvcC1jb2xvcj0iI2FkNmVjNSIgc3RvcC1vcGFjaXR5PSIuMTIiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhNDZiYmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjE5IiBoZWlnaHQ9IjE5IiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNMTkgMEgwVjE5IiBmaWxsPSJub25lIiBzdHJva2U9IiM1NzQxNmYiIHN0cm9rZS1vcGFjaXR5PSIuMiIvPjwvcGF0dGVybj4KICAgIDxwYXR0ZXJuIGlkPSJyYXN0ZXIiIHdpZHRoPSI2IiBoZWlnaHQ9IjYiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0wIDVoNiIgc3Ryb2tlPSIjMGQwYjE1IiBzdHJva2Utb3BhY2l0eT0iLjI2Ii8+PC9wYXR0ZXJuPgogICAgPG1hc2sgaWQ9ImxlZnQiPjxwYXRoIGZpbGw9InVybCgjZmFkZS1tYXNrKSIgZD0iTTAgMGg1NDV2MjQ0SDB6Ii8+PC9tYXNrPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJmYWRlLW1hc2siPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiLz48c3RvcCBvZmZzZXQ9Ii4zNyIgc3RvcC1jb2xvcj0iI2ZmZiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGQ9Ik0wIDBoNTQ1djI0NEgweiIgZmlsbD0idXJsKCNmYWRlKSIvPgogIDxnIG1hc2s9InVybCgjbGVmdCkiPgogICAgPHBhdGggZD0iTTAgMGg1NDV2MjQ0SDB6IiBmaWxsPSJ1cmwoI2dyaWQpIi8+CiAgICA8ZWxsaXBzZSBjeD0iMzc3IiBjeT0iMTExIiByeD0iMTUzIiByeT0iMTI0IiBmaWxsPSJ1cmwoI2dsb3cpIiBzaGFwZS1yZW5kZXJpbmc9ImF1dG8iLz4KICAgIDxwYXRoIGQ9Ik0wIDIxNWgzNnYtOGgyNnYtOWgyNHYtOWgzMHYtMTNoMjd2LTEyaDI4di0xM2gxOXYtMTVoMjJ2LTE2aDI0di0xMmgyMHY4aDE5djEzaDI1djE1aDIwdjExaDIwdjEwaDI2di0xNmgyMnYtMTNoMjZ2LTEwaDE2di0xNWgxN3YtMThoMTV2LTE3aDE3di0xNWgyMXYtMTJoMTV2MjFoMTZ2MTNoMTR2MTloMTN2LTdoMTF2MTQ5SDB6IiBmaWxsPSIjMzAyMDQ0Ii8+CiAgICA8cGF0aCBkPSJNMCAyMTloODB2LTdoNDN2LTEzaDMzdi05aDMzdi0xNmgzNXYtOWgyNnYtMTFoMjV2LTEzaDE3di0xMGgxMnYxNWgxNnY3aDE5djEzaDIxdjE0aDE1djhoMjh2LTloMjJ2LTEyaDIwdi05aDI4di0xMmgyMnYtMTZoMjB2LTEyaDMwdjEyNkgweiIgZmlsbD0idXJsKCNncm91bmQpIi8+CiAgICA8cGF0aCBkPSJNMCAyMjhoMTU1di04aDI5di02aDQwdi03aDM4di05aDMzdi05aDI3di0xMGgyOHYtNmg0MnY2aDI0djhoMjl2OGgyMXYtOGgyNXYtOGgyN3YtOWgyN3Y3NEgweiIgZmlsbD0iIzI0MTgzMyIvPgogICAgPHBhdGggZD0iTTAgMjM3aDE5NnYtN2gyNHYtNmgzNHYtNGgyN3YtN2gzMHYtN2gyNHYtN2gyMHYtNmgyOXYzaDIwdjhoMjV2N2gyNnY3aDM5di02aDI1di02aDI2djM4SDB6IiBmaWxsPSIjMTkxMjI1Ii8+CiAgICA8cGF0aCBkPSJNMCAwaDU0NXYyNDRIMHoiIGZpbGw9InVybCgjcmFzdGVyKSIvPgogICAgPHBhdGggZD0iTTM0MCAxOTVoMjF2LTNoNDN2M2gxN3Y0aC04MXoiIGZpbGw9IiM2YjQ2NWMiIG9wYWNpdHk9Ii41NCIvPgogICAgPHBhdGggZD0iTTM2NiAxODhoMjZ2MmgtMjZ6IiBmaWxsPSIjZTJhOTYyIiBvcGFjaXR5PSIuNjQiLz4KICAgIDxwYXRoIGQ9Ik0zNzIgMTg2aDE0djJoLTE0eiIgZmlsbD0iI2Y3Y2M4MyIgb3BhY2l0eT0iLjgzIi8+CiAgICA8cGF0aCBkPSJNMzcyIDUwaDEydjIyaDd2MTFoMTN2N2gyMnYxMmgtMjJ2N2gtMTN2MTFoLTd2MjJoLTEydi0yMmgtN3YtMTFoLTEzdi03aC0yMlY5MGgyMnYtN2gxM1Y3Mmg3eiIgZmlsbD0iIzhlNWQ2MCIgb3BhY2l0eT0iLjE4Ii8+CiAgICA8cGF0aCBkPSJNMzc0IDYzaDh2MTdoNnY4aDl2NGgxN3Y4aC0xN3Y0aC05djhoLTZ2MTdoLTh2LTE3aC02di04aC05di00aC0xN3YtOGgxN3YtNGg5di04aDZ6IiBmaWxsPSIjZDU5MTYwIi8+CiAgICA8cGF0aCBkPSJNMzc1IDcwaDZ2MTVoNnY3aDd2MWgxMnY2aC0xMnYxaC03djdoLTZ2MTVoLTZ2LTE1aC02di03aC03di0xaC0xMnYtNmgxMnYtMWg3di03aDZ6IiBmaWxsPSIjZjdjYTgzIi8+CiAgICA8cGF0aCBkPSJNMzc2IDg1aDR2OGg4djZoLTh2OGgtNHYtOGgtOHYtNmg4eiIgZmlsbD0iI2ZmZjJjOCIvPgogICAgPHBhdGggZD0iTTIyMiA1NGgzdjNoLTN6bTY5IDMwaDN2M2gtM3ptMjUtNDhoM3YzaC0zem0xMTQgMzdoM3YzaC0zem0yOSA0MGgzdjNoLTN6bTMxLTcyaDR2NGgtNHptMzAgOTJoM3YzaC0zek0zNTAgMTQ1aDR2NGgtNHptNjUtMTNoMnYyaC0yem0tODIgMzFoMnYyaC0yem04Mi0xMGgzdjNoLTN6bS0xMzIgMTloM3YzaC0zeiIgZmlsbD0iI2RlYjk4YSIgb3BhY2l0eT0iLjY3Ii8+CiAgICA8cGF0aCBkPSJNMjk1IDU2aDN2M2gzdjNoLTN2M2gtM3YtM2gtM3YtM2gzem0xNDktMzJoMnYyaDJ2MmgtMnYyaC0ydi0yaC0ydi0yaDJ6IiBmaWxsPSIjYTg4MmM0Ii8+CiAgPC9nPgo8L3N2Zz4K" class="landscape" alt="" width="545" height="244">
+      <span class="hero-index" aria-hidden="true">✦ &nbsp; SAVE // LOAD</span>
+    </section>
+
+    <nav class="progress" aria-label="Editor steps" id="workbench">
+      <ol>
+        <li><button type="button" data-step="1" aria-current="step"><span class="step-num">01</span><span>Source</span></button></li>
+        <li><button type="button" data-step="2" disabled><span class="step-num">02</span><span>Edit</span></button></li>
+        <li><button type="button" data-step="3" disabled><span class="step-num">03</span><span>Review</span></button></li>
+        <li><button type="button" data-step="4" disabled><span class="step-num">04</span><span>Download</span></button></li>
+      </ol>
+    </nav>
+
+    <div class="work-grid">
+      <div class="work-card">
+        <section id="source" aria-labelledby="source-title">
+          <div class="section-head">
+            <p class="eyebrow">01 / SOURCE</p>
+            <h2 id="source-title" tabindex="-1">Choose a starting point</h2>
+            <p>Bring your own save or choose a checkpoint to start from.</p>
+          </div>
+          <div class="mode-grid">
+            <button type="button" class="mode-card" data-mode="import" aria-pressed="true">
+              <span class="mode-icon"><svg class="icon" aria-hidden="true"><use href="#folder"/></svg></span>
+              <span class="mode-copy"><strong>Edit my save</strong><small>Import your original PC files</small></span>
+              <span class="radio-dot" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="mode-card" data-mode="checkpoint" aria-pressed="false">
+              <span class="mode-icon"><svg class="icon" aria-hidden="true"><use href="#spark"/></svg></span>
+              <span class="mode-copy"><strong>Start from a checkpoint</strong><small>Generate a save without importing files</small></span>
+              <span class="radio-dot" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div id="import-panel">
+            <div class="drop-zone" id="drop-zone">
+              <span class="upload-mark"><svg class="icon" aria-hidden="true"><use href="#upload"/></svg></span>
+              <strong>Drop your save files here</strong>
+              <span>Use <code>file0</code> and, if available, <code>undertale.ini</code>.</span>
+              <div class="button-row">
+                <button type="button" class="button compact" id="pick-save">Choose file0</button>
+                <button type="button" class="button compact ghost" id="pick-ini">Choose undertale.ini</button>
+                <input type="file" id="save-picker" aria-label="Choose file0" hidden>
+                <input type="file" id="ini-picker" aria-label="Choose undertale.ini" hidden>
+              </div>
+            </div>
+            <ul class="files" id="import-files" aria-label="Imported files"></ul>
+            <p class="form-message" id="import-message" role="status" aria-live="polite"></p>
+            <div class="section-actions">
+              <div id="source-backups" class="button-row"></div>
+              <button type="button" class="button primary" id="start-edit" disabled>Continue to editor <svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></button>
+            </div>
+          </div>
+          <div id="checkpoint-panel" hidden>
+            <div class="notice">
+              <svg class="icon" aria-hidden="true"><use href="#layers"/></svg>
+              <div><strong>Generate a save</strong><p>Choose a checkpoint from a recorded PC playthrough, then edit and download both files. These saves keep that playthrough’s choices and world state.</p></div>
+            </div>
+            <div class="checkpoint-controls">
+              <label>Area <select id="area-filter"><option value="">All areas</option></select></label>
+              <label>Route <select id="route-filter"><option value="">All routes</option></select></label>
+            </div>
+            <p class="form-message" id="checkpoint-message" role="status" aria-live="polite"></p>
+            <div class="checkpoint-list" id="checkpoint-presets"></div>
+            <p id="checkpoint-source" class="help-text">Generated saves start with the name Chara. Based on <a href="https://github.com/Putnam3145/Undertale-Save" target="_blank" rel="noopener noreferrer">Putnam3145’s 2015 PC playthrough</a>. Savepoint checked the file structure and route data. Loading on current PC builds has not been tested.</p>
+            <details class="advanced" id="personal-checkpoints">
+              <summary><span>Use your own checkpoint files</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary>
+              <div class="details-inner">
+                <p class="help-text">Choose a milestone or name your own. Add file0 and undertale.ini from the same save. You can keep a draft here while you test it in the game.</p>
+                <p class="help-text">Need a starting save? Browse the <a href="https://www.speedrun.com/undertale/resources" target="_blank" rel="noopener noreferrer">UNDERTALE community save packs</a>. Check the author's version and route notes and choose only the two save files.</p>
+                <form id="capture-form">
+                  <div class="field-grid">
+                    <label>Checkpoint <select id="capture-point" required><option value="custom">Custom checkpoint</option></select></label>
+                    <label>PC version and platform <input id="capture-version" placeholder="e.g. Steam Windows v1.08" maxlength="70" required></label>
+                    <div id="capture-custom" class="field-grid">
+                      <label>Checkpoint name <input id="capture-name" maxlength="70" required></label>
+                      <label>Area <select id="capture-area"></select></label>
+                      <label>Route <select id="capture-route"></select></label>
+                      <label>Checkpoint description <input id="capture-description" maxlength="180" placeholder="e.g. At the SAVE point before the fight"></label>
+                    </div>
+                    <label>Captured file0 <input type="file" id="capture-save" required></label>
+                    <label>Captured undertale.ini <input type="file" id="capture-ini" required></label>
+                  </div>
+                  <label class="field">Known limitations <input id="capture-limits" maxlength="180" placeholder="e.g. Later dialogue and ending untested"></label>
+                  <button class="button" type="submit">Save checkpoint draft</button>
+                  <p class="form-message" id="capture-message" role="status"></p>
+                </form>
+                <div class="checkpoint-list" id="checkpoint-list"></div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section id="editor" aria-labelledby="editor-title" hidden>
+          <div class="section-head edit-head">
+            <div><p class="eyebrow">02 / EDIT</p><h2 id="editor-title" tabindex="-1">Edit save data</h2><p id="editor-source"></p></div>
+            <div class="button-row"><button class="button compact ghost" type="button" id="undo" disabled><svg class="icon" aria-hidden="true"><use href="#icon-undo"/></svg>Undo</button><button class="button compact ghost" type="button" id="reset-all" disabled>Reset all edits</button></div>
+          </div>
+          <div class="edit-nav" aria-label="Editor sections">
+            <a href="#stats-section">Stats</a><a href="#items-section">Items</a><a href="#route-section">Progress</a><a href="#persistent-section">Persistent data</a>
+          </div>
+          <section class="editor-section" id="stats-section"><h3>Player stats</h3><div class="field-grid" id="stat-fields"></div></section>
+          <section class="editor-section" id="items-section">
+            <h3>Inventory & equipment</h3>
+            <p class="help-text">Equipping an item changes its stored bonus. Your inventory stays in the order shown below.</p>
+            <div class="field-grid" id="equipment-fields"></div>
+            <details class="advanced slots" open><summary><span>Inventory · 8 slots</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary><div class="details-inner field-grid" id="inventory-fields"></div></details>
+            <details class="advanced slots"><summary><span>Dimensional Box A · 10 slots</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary><div class="details-inner field-grid" id="boxa-fields"></div></details>
+            <details class="advanced slots"><summary><span>Dimensional Box B · 10 slots</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary><div class="details-inner field-grid" id="boxb-fields"></div></details>
+          </section>
+          <section class="editor-section" id="route-section">
+            <h3>Progress & route</h3>
+            <p class="help-text" id="room-summary"></p>
+            <label class="field">Requested route <select id="route-target"><option value="any">Inspect only</option><option value="pacifist">Pacifist</option><option value="neutral">Neutral</option><option value="genocide">Genocide</option></select><small>Used in the review. This choice writes no flags.</small></label>
+            <div class="field-grid" id="kill-fields"></div>
+          </section>
+          <section class="editor-section" id="persistent-section">
+            <h3>Persistent data</h3>
+            <p class="help-text"><code>undertale.ini</code> is separate from your world save. Change its existing values here.</p>
+            <div class="field-grid" id="ini-fields"></div>
+          </section>
+          <details class="advanced" id="advanced">
+            <summary><span>Advanced save data</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary>
+            <div class="details-inner">
+              <div class="notice caution"><svg class="icon" aria-hidden="true"><use href="#alert"/></svg><div><strong>Room override and story flags</strong><p>Room, spawn position and events can conflict, leaving you stuck or crashing the game. This format has no safely mapped coordinate fields.</p></div></div>
+              <div class="field-grid" id="flag-fields"></div>
+              <details class="advanced"><summary><span>Raw file0 lines</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary>
+                <div class="details-inner">
+                  <p class="help-text">Select a line to inspect it. Unmapped lines have unknown meanings and are preserved until you apply an edit.</p>
+                  <label class="field">Line number <input id="raw-line" type="number" inputmode="numeric" min="1" step="1" value="9"></label>
+                  <label class="field">Stored line <input id="raw-value" type="text" maxlength="4096" autocomplete="off"></label>
+                  <div class="button-row"><button type="button" class="button compact" id="raw-apply">Apply raw edit</button><button type="button" class="button compact ghost" id="raw-reset">Restore original</button></div>
+                  <p class="form-message" id="raw-message" role="status"></p>
+                </div>
+              </details>
+              <details class="advanced"><summary><span>Other undertale.ini values</span><svg class="icon" aria-hidden="true"><use href="#chevron"/></svg></summary><div class="details-inner field-grid" id="ini-raw-fields"></div></details>
+            </div>
+          </details>
+          <p id="editor-message" class="form-message" role="status"></p>
+          <div class="section-actions"><button type="button" class="button ghost" data-go="1">Back to source</button><button type="button" class="button primary" data-go="3">Review changes <svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></button></div>
+        </section>
+
+        <section id="review" aria-labelledby="review-title" hidden>
+          <div class="section-head"><p class="eyebrow">03 / REVIEW</p><h2 id="review-title" tabindex="-1">Review changes</h2><p>Check the save against your requested route and inspect the exact edits.</p></div>
+          <div id="route-report"></div>
+          <div id="diff-report"></div>
+          <div class="section-actions"><button type="button" class="button ghost" data-go="2">Back to edits</button><button type="button" class="button primary" data-go="4">Continue to download <svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></button></div>
+        </section>
+
+        <section id="download" aria-labelledby="download-title" hidden>
+          <div class="section-head"><p class="eyebrow">04 / DOWNLOAD</p><h2 id="download-title" tabindex="-1">Download your save</h2><p>Save the backups first, then place the edited files in the game’s save folder.</p></div>
+          <div id="download-warning"></div>
+          <div class="download-grid" id="download-files"></div>
+          <div class="section-actions"><button type="button" class="button ghost" data-go="3">Back to review</button><a class="button" href="#recovery">Open recovery guide</a></div>
+        </section>
+      </div>
+
+      <aside class="side" aria-label="Save and recovery information">
+        <section class="side-card status-card">
+          <p class="eyebrow"><span class="light"></span> WORKSPACE STATUS</p>
+          <h3 id="status-title">Ready for a save</h3>
+          <p id="status-text">Import <code>file0</code> to unlock the editor. Add <code>undertale.ini</code> to check persistent data.</p>
+          <div class="status-rows"><div><code>file0</code><span id="status-save">Waiting</span></div><div><code>undertale.ini</code><span id="status-ini">Optional</span></div></div>
+        </section>
+        <section class="side-card privacy-card">
+          <svg class="icon" aria-hidden="true"><use href="#shield"/></svg>
+          <div><h3>Your saves stay with you</h3><p>Files are read on this device. You choose what to download and replace.</p></div>
+        </section>
+        <section class="side-card recovery" id="recovery">
+          <p class="eyebrow">PLAYER GUIDE</p>
+          <h3>Save folder & recovery</h3>
+          <ol><li>Quit UNDERTALE completely.</li><li>Copy your whole save folder to a safe place.</li><li>Place the downloads in the folder as <code>file0</code> and, if used, <code>undertale.ini</code>. If the game fails to load, quit and restore your backup folder.</li></ol>
+          <dl class="paths"><dt>Windows</dt><dd><code>%LOCALAPPDATA%\UNDERTALE</code></dd><dt>macOS</dt><dd><code>~/Library/Application Support/com.tobyfox.undertale/</code></dd><dt>Linux (Steam)</dt><dd><code>~/.config/UNDERTALE/</code></dd></dl>
+          <p><code>file9</code> is used for autosaves and Game Over recovery. Leave it to the game.</p>
+          <a href="data:text/plain;charset=utf-8;base64,U0FWRVBPSU5UCkJyb3dzZXItb25seSBzYXZlIGVkaXRvciBmb3IgdGhlIG9yaWdpbmFsIFBDIHZlcnNpb24gb2YgVU5ERVJUQUxFCgpTdXBwb3J0ZWQgZmlsZXMKLS0tLS0tLS0tLS0tLS0tClVzZSBmaWxlMCwgdGhlIG9yaWdpbmFsIGdhbWUncyB0ZXh0IHdvcmxkIHNhdmUuIHVuZGVydGFsZS5pbmkgaXMgb3B0aW9uYWwgYW5kCmhhcyBpdHMgb3duIGVkaXRvciBhbmQgZG93bmxvYWQuIFRoZSBlZGl0b3IgY2hlY2tzIGZvciB0aGUgZG9jdW1lbnRlZAo1NDktbGluZSBmaWxlMCBsYXlvdXQgYW5kIHJldGFpbnMgZXh0cmEgbGluZXMsIGxpbmUgZW5kaW5ncywgYSBVVEYtOCBCT00sCmFuZCB1bnRvdWNoZWQgdmFsdWVzLiBJdCBwcmVzZXJ2ZXMgdGhlIG9yZGVyaW5nLCBjb21tZW50cyBhbmQgdW5rbm93bgplbnRyaWVzIGluIHVuZGVydGFsZS5pbmkuIEZpbGVzIHdpdGggYW4gdW5zdXBwb3J0ZWQgbGF5b3V0IG9yIGVuY29kaW5nIGFyZQpyZWplY3RlZC4gZmlsZTkgaXMgdXNlZCBmb3IgYXV0b3NhdmVzIGFuZCBHYW1lIE92ZXIgcmVjb3ZlcnkuIEtlZXAgaXQgaW4gdGhlCmdhbWUncyBzYXZlIGZvbGRlci4gQ29uc29sZSBlZGl0aW9ucywgbW9kcyBhbmQgb3RoZXIgZ2FtZXMgYXJlIG91dCBvZiBzY29wZS4KClVzaW5nIHRoZSBlZGl0b3IKLS0tLS0tLS0tLS0tLS0tLQpDaG9vc2UgRWRpdCBteSBzYXZlIGFuZCBzZWxlY3QgZmlsZTAsIHdpdGggdW5kZXJ0YWxlLmluaSBpZiBhdmFpbGFibGUuIFlvdQpjYW4gYWxzbyBkcm9wIHRoZW0gaW50byB0aGUgaW1wb3J0IGFyZWEuIERvd25sb2FkIHRoZSBvcmlnaW5hbCBjb3BpZXMgYmVmb3JlCmVkaXRpbmcuIE1ha2UgY2hhbmdlcywgcmV2aWV3IHRoZSBleGFjdCBsaW5lcyBhbmQgZG93bmxvYWQgZWFjaCBmaWxlIHlvdSB3YW50CnRvIHJlcGxhY2UuIENob29zaW5nIGEgcm91dGUgcnVucyBjb25zaXN0ZW5jeSBjaGVja3Mgb24gZG9jdW1lbnRlZCBmaWVsZHMuCllvdSBjYW4gYXBwbHkgaW5kaXZpZHVhbCBvZmZlcmVkIElOSSBmaXhlcyBhZnRlciByZXZpZXdpbmcgdGhlbS4gQW4gZW5kaW5nCmRlcGVuZHMgb24gdGhlIGZ1bGwgcnVuLCBpbmNsdWRpbmcgY2hvaWNlcyBhbmQgaGlzdG9yeSBvdXRzaWRlIHRoZXNlIGNoZWNrcy4KClRoZSBlZGl0IGxpbWl0cyBmb3IgZ29sZCwgRVhQLCBhdHRhY2sgYW5kIGRlZmVuY2UgYXJlIGVkaXRvciBndWFyZHJhaWxzLgpUaGUgZ2FtZSBtYXkgcmVjYWxjdWxhdGUgc29tZSBzdGF0cy4gRXF1aXBtZW50IGNoYW5nZXMgYWxzbyBwYXRjaCB0aGUKY29ycmVzcG9uZGluZyBzdG9yZWQgYm9udXMuIEEgcm9vbSBvciBwbG90IG92ZXJyaWRlIGNhbiBsZWF2ZSB5b3Ugc3R1Y2sgb3IKY2F1c2UgYSBsb2FkIGZhaWx1cmUuIFNwYXduIGNvb3JkaW5hdGVzIGhhdmUgbm8gc2FmZWx5IG1hcHBlZCBjb250cm9scy4KCkNoZWNrcG9pbnRzCi0tLS0tLS0tLS0tCkNob29zZSBTdGFydCBmcm9tIGEgY2hlY2twb2ludCBhbmQgY2xpY2sgR2VuZXJhdGUgc2F2ZSBvbiBhIGJ1aWx0LWluCm1pbGVzdG9uZS4gTm8gZmlsZXMgYXJlIHJlcXVpcmVkLiBUaGUgZ2VuZXJhdG9yIHN0YXJ0cyBmcm9tIGEgbWF0Y2hpbmcKZmlsZTAgYW5kIHVuZGVydGFsZS5pbmkgY2FwdHVyZWQgaW4gUHV0bmFtMzE0NSdzIGRvY3VtZW50ZWQgMjAxNSBQQwpwbGF5dGhyb3VnaC4gU2F2ZXBvaW50IGNoZWNrcyBmaWxlIHN0cnVjdHVyZSwgcm9vbSBhbmQgcm91dGUgZGF0YS4gTG9hZGluZwpvbiBuZXdlciBQQyBidWlsZHMgYW5kIHNwZWNpZmljIGVuZGluZ3MgaGF2ZSBub3QgYmVlbiB0ZXN0ZWQuIFRoZSBwaW5uZWQKb3JpZ2luYWwgY2FwdHVyZSBpcyBsaW5rZWQgb24gdGhlIGRvd25sb2FkIHNjcmVlbi4KClRvIGFkZCB5b3VyIG93biwgb3BlbiBVc2UgeW91ciBvd24gY2hlY2twb2ludCBmaWxlcy4gU2VsZWN0IGEgcHJlc2V0Cm1pbGVzdG9uZSBvciBuYW1lIHlvdXIgb3duLCB0aGVuIGFkZCBib3RoIGZpbGVzIGZyb20gdGhlIHNhbWUgaW4tZ2FtZSBzYXZlLgpDaGVja3BvaW50IGRyYWZ0cyBhbmQgdGVzdGVkIGNhcHR1cmVzIHN0YXkgaW4gdGhpcyBicm93c2VyIGlmIHNpdGUgc3RvcmFnZQpwZXJtaXRzLgoKT24gdGhlIGRyYWZ0IGNhcmQsIG9wZW4gVGVzdCB0aGlzIGNoZWNrcG9pbnQuIEJhY2sgdXAgeW91ciBleGlzdGluZyBnYW1lCmZvbGRlciBhbmQgbG9hZCB0aGUgZXhhY3Qgb3JpZ2luYWwgcGFpciBpbi1nYW1lLiBDaGVjayBzcGF3biwgc3RhdHMsIGl0ZW1zCmFuZCBlcXVpcG1lbnQsIGFuZCBjb250aW51ZSBmYXIgZW5vdWdoIHRvIGNvbmZpcm0gdGhlIGxpc3RlZCByb3V0ZS4gQWZ0ZXIKbWFya2luZyBpdCBhcyBwbGF5ZXItdGVzdGVkLCBzZWxlY3QgVXNlIGNoZWNrcG9pbnQgdG8gY3VzdG9taXNlIGFuZApkb3dubG9hZCBhIGNvcHkuIFRoZSBzYXZlZCBjaGVja3BvaW50IHJldGFpbnMgaXRzIG9yaWdpbmFsIGJ5dGVzLgoKTGF0ZXIgZXZlbnRzIGFuZCBlbmRpbmdzIGRlcGVuZCBvbiB0aGUgcm91dGUgYW5kIHRoZSBjaG9pY2VzIGluIHRoZSBzYXZlLgoKQmFja3VwLCByZXBsYWNlIGFuZCByZWNvdmVyCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoxLiBRdWl0IFVOREVSVEFMRSBjb21wbGV0ZWx5LgoyLiBMb2NhdGUgdGhlIGdhbWUgc2F2ZSBmb2xkZXI6CiAgIFdpbmRvd3MgICAgICAlTE9DQUxBUFBEQVRBJVxVTkRFUlRBTEUKICAgbWFjT1MgICAgICAgIH4vTGlicmFyeS9BcHBsaWNhdGlvbiBTdXBwb3J0L2NvbS50b2J5Zm94LnVuZGVydGFsZS8KICAgTGludXgvU3RlYW0gIH4vLmNvbmZpZy9VTkRFUlRBTEUvCjMuIENvcHkgdGhlIGVudGlyZSBmb2xkZXIgdG8gYSBzZXBhcmF0ZSBiYWNrdXAgbG9jYXRpb24sIGluY2x1ZGluZyBhbnkgZmlsZXMKICAgdGhpcyBlZGl0b3IgZG9lcyBub3QgcmVhZC4gS2VlcCB0aGUgYXBwJ3Mgb3JpZ2luYWwgZG93bmxvYWRzIGFzIHdlbGwuCjQuIE1vdmUgeW91ciBlZGl0ZWQgZG93bmxvYWRzIGludG8gdGhlIHNhdmUgZm9sZGVyIG1hbnVhbGx5LiBUaGUgZmlsZW5hbWVzCiAgIG11c3QgYmUgZXhhY3RseSBmaWxlMCBhbmQgdW5kZXJ0YWxlLmluaS4gQ2hlY2sgZm9yIGJyb3dzZXItYWRkZWQgc3VmZml4ZXMuCjUuIElmIHRoZSBnYW1lIGZhaWxzIHRvIGxvYWQgb3IgYmVoYXZlcyB1bmV4cGVjdGVkbHksIHF1aXQgaXQgYW5kIHJlc3RvcmUKICAgdGhlIGVudGlyZSBiYWNrdXAgZm9sZGVyLiBUbyByZXN0b3JlIGp1c3QgYW4gb3JpZ2luYWwgZG93bmxvYWRlZCBmaWxlLAogICByZW1vdmUgaXRzIC5iYWNrdXAgc3VmZml4IGJlZm9yZSBwbGFjaW5nIGl0IGluIHRoZSBzYXZlIGZvbGRlci4KClByaXZhY3kgYW5kIHZlcmlmaWNhdGlvbgotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KU2F2ZXBvaW50IHJlYWRzIGFuZCBlZGl0cyBmaWxlcyBpbiBtZW1vcnkgaW4geW91ciBicm93c2VyLiBEb3dubG9hZHMgYXJlCmNyZWF0ZWQgb24gdGhpcyBkZXZpY2UuIFRoZXJlIGlzIG5vIHNhdmUgdXBsb2FkLCBhY2NvdW50LCBhbmFseXRpY3MsIG9yCm5ldHdvcmsgQVBJIGZvciBlZGl0aW5nLiBUaGUgc2l0ZSB1c2VzIG9yaWdpbmFsIGdyYXBoaWNzIGFuZCBubyBnYW1lIGFzc2V0cy4KU2F2ZSBlZGl0aW5nIGlzIHVub2ZmaWNpYWwgYW5kIGNhbiBicmVhayBvciBhbHRlciB5b3VyIHByb2dyZXNzLgoKVGhlIHBhcnNlciBhbmQgcGF0Y2hlciBoYXZlIGF1dG9tYXRlZCByZWdyZXNzaW9uIHRlc3RzLiBUaGUgZG9jdW1lbnRlZApsYXlvdXQgd2FzIGFsc28gY2hlY2tlZCBhZ2FpbnN0IGEgbG9jYWwgV2luZG93cyBTdGVhbSB2MS4wOCBmaWxlIHBhaXIuIFRoZQpnYW1lIGNvdWxkIG5vdCBiZSBsYXVuY2hlZCBpbiBpc29sYXRpb24gaGVyZSwgc28gZWRpdGVkIHNhdmVzIGFuZCBidW5kbGVkCmNoZWNrcG9pbnQgbG9hZHMgaGF2ZSBubyBpbi1nYW1lIHZlcmlmaWNhdGlvbiBmb3IgdGhpcyBidWlsZC4KCkZvcm1hdCByZWZlcmVuY2VzCi0tLS0tLS0tLS0tLS0tLS0tCmh0dHBzOi8vZ2l0aHViLmNvbS9jcnVtYmxpbmdzdGF0dWUvRmxvd2V5c1RpbWVNYWNoaW5lCmh0dHBzOi8vdW5kZXJ0YWxlLndpa2kvdy9TdGF0cwpodHRwczovL3VuZGVydGFsZS53aWtpL3cvU2F2ZV9maWxlCmh0dHBzOi8vc3RlYW1jb21tdW5pdHkuY29tL3NoYXJlZGZpbGVzL2ZpbGVkZXRhaWxzLz9pZD0xNDAzODg4MTExCmh0dHBzOi8vdW5kZXJ0YWxlLmNvbS9oZWxwLwo=" download="README.txt">Download README <span aria-hidden="true">↘</span></a>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <footer class="wrap footer"><span><svg class="icon" aria-hidden="true"><use href="#spark"/></svg> SAVEPOINT <span class="slash">/</span> UNOFFICIAL FAN TOOL</span><span>Save editing can break or change your progress.</span></footer>
+  <noscript><p class="noscript">Enable JavaScript to read and edit saves locally.</p></noscript>
+<script>/* Original PC UNDERTALE, documented 549-line layout. All offsets are one-based. */
+(() => {
+  'use strict';
+
+  const MAX_BYTES = 128 * 1024;
+  const MIN_LINES = 549;
+  const DEFAULT_PLAYER_NAME = 'Chara';
+  const integer = (label, min, max, help = '') => ({ label, min, max, help });
+  const choice = (label, options, help = '') => ({ label, options, help });
+  const offOn = { 0: 'Initial state', 1: 'Set' };
+  const defeated = { 0: 'Initial state', 1: 'Killed' };
+  const dog = { ...defeated, 2: 'Spared by playing fetch' };
+  const stats = {
+    1: { label: 'Player name', name: true, help: 'Use up to six ASCII letters, as in the naming screen.' },
+    2: integer('LV', 1, 20, 'LOVE. EXP is stored separately.'),
+    3: integer('Current HP', 1, 109, 'Resting can temporarily raise HP above the usual maximum.'),
+    4: integer('Maximum HP', 1, 99, 'The game may recalculate this from LV in battle.'),
+    5: integer('Base ATK', 0, 999, 'Stored value. The stat screen normally subtracts 10 before adding equipment.'),
+    6: integer('Weapon ATK bonus', 0, 999),
+    7: integer('Base DEF', 0, 999, 'Stored value. The stat screen normally subtracts 10 before adding equipment.'),
+    8: integer('Armour DEF bonus', 0, 999),
+    10: integer('EXP', 0, 999999, '99,999 normally reaches LV 20.'),
+    11: integer('Gold', 0, 999999)
+  };
+  const counts = {
+    12: integer('Total monster kills', 0, 9999),
+    233: integer('Ruins kills', 0, 9999, 'Genocide quota · 20'),
+    234: integer('Snowdin kills', 0, 9999, 'Genocide quota · 16'),
+    235: integer('Waterfall kills', 0, 9999, 'Genocide quota · 18'),
+    236: integer('Hotland / CORE kills', 0, 9999, 'Shared Genocide quota · 40')
+  };
+  const flags = {
+    36: integer('FUN', 0, 100, 'Controls some rare events. The INI can hold its own value.'),
+    38: choice('Asriel defeated', offOn),
+    45: choice('Training Dummy', { 0: 'Initial state', 1: 'Defeated', 2: 'Talked to', 3: 'Got tired' }),
+    54: integer('Enemies spared', 0, 9999),
+    57: integer('Murder level override', 0, 50, 'Debug override. Leave at the captured value for normal play.'),
+    58: choice('Key enemy spared', offOn, 'A spared boss or miniboss can end a Genocide attempt.'),
+    76: choice('Toriel', { 0: 'Initial state', 1: 'In basement', 3: 'Fled', 4: 'Killed', 5: 'Spared' }),
+    83: choice('Doggo', dog),
+    84: choice('Dogamy and Dogaressa', dog),
+    85: choice('Greater Dog', { ...dog, 3: 'Ignored' }),
+    88: choice('Snowdrake', { 0: 'Initial state', 1: 'Laughed at joke', 2: 'Killed' }),
+    98: choice('Papyrus', { '-3': 'Lost three times', '-2': 'Lost twice', '-1': 'Lost once', ...defeated }),
+    112: choice('Shyren', { ...defeated, 2: 'Continued humming' }),
+    282: choice('Undyne the Undying', defeated),
+    283: choice('Glad Dummy', defeated),
+    381: choice('Undyne', { ...defeated, 2: 'Sick' }),
+    428: choice('Muffet', defeated),
+    433: choice('Royal Guards', defeated),
+    456: choice('Mettaton', defeated, 'The route and plot determine which encounter this refers to.'),
+    496: choice('Undyne joins Papyrus’s calls', offOn),
+    524: { label: 'True Lab progress', decimal: true, help: '12 is the documented exited state.' },
+    543: { label: 'Plot value', decimal: true, help: 'Raw story progression. Other flags and room state can still conflict.' },
+    546: choice('Has cellphone', offOn)
+  };
+  const items = [
+    'Empty', 'Monster Candy', 'Croquet Roll', 'Stick', 'Bandage', 'Rock Candy',
+    'Pumpkin Rings', 'Spider Donut', 'Stoic Onion', 'Ghost Fruit', 'Spider Cider',
+    'Butterscotch Pie', 'Faded Ribbon', 'Toy Knife', 'Tough Glove', 'Manly Bandanna',
+    'Snowman Piece', 'Nice Cream', 'Puppydough Icecream', 'Bisicle', 'Unisicle',
+    'Cinnamon Bunny', 'Temmie Flakes', 'Abandoned Quiche', 'Old Tutu', 'Ballet Shoes',
+    'Punch Card', 'Annoying Dog', 'Dog Salad', 'Dog Residue 1', 'Dog Residue 2',
+    'Dog Residue 3', 'Dog Residue 4', 'Dog Residue 5', 'Dog Residue 6', 'Astronaut Food',
+    'Instant Noodles', 'Crab Apple', 'Hot Dog…?', 'Hot Cat', 'Glamburger', 'Sea Tea',
+    'Starfait', 'Legendary Hero', 'Cloudy Glasses', 'Torn Notebook', 'Stained Apron',
+    'Burnt Pan', 'Cowboy Hat', 'Empty Gun', 'Heart Locket', 'Worn Dagger', 'Real Knife',
+    'The Locket', 'Bad Memory', 'Dream', 'Undyne’s Letter', 'Undyne’s Letter EX',
+    'Popato Chisps', 'Junk Food', 'Mystery Key', 'Face Steak', 'Hush Puppy', 'Snail Pie',
+    'Temmie Armour'
+  ];
+  const weapon = { 3: 0, 13: 3, 14: 5, 25: 7, 45: 2, 47: 10, 49: 12, 51: 15, 52: 99 };
+  const armour = { 4: 0, 12: 3, 15: 7, 24: 10, 44: 6, 46: 11, 48: 12, 50: 15, 53: 99, 64: 20 };
+  const equipment = { 29: { label: 'Equipped weapon', bonus: 6, ids: weapon }, 30: { label: 'Equipped armour', bonus: 8, ids: armour } };
+  const inventory = Array.from({ length: 8 }, (_, i) => 13 + 2 * i);
+  const boxA = Array.from({ length: 10 }, (_, i) => 331 + i);
+  const boxB = Array.from({ length: 10 }, (_, i) => 343 + i);
+  const availableItems = Object.fromEntries(items.flatMap((name, id) => (
+    [2, 5, 6, 8, 9, 18, 63].includes(id) ? [] : [[id, name]]
+  )));
+  const definitions = {
+    ...stats, ...counts, ...flags,
+    29: choice(equipment[29].label, Object.fromEntries(Object.keys(weapon).map(id => [id, items[id]]))),
+    30: choice(equipment[30].label, Object.fromEntries(Object.keys(armour).map(id => [id, items[id]]))),
+    548: integer('Spawn room ID', 0, 999, 'A raw room override can strand you or trigger a load failure.'),
+    ...Object.fromEntries([inventory, boxA, boxB].flatMap((slots, group) => slots.map((line, i) => [
+      line, choice(`${['Inventory', 'Box A', 'Box B'][group]} · slot ${i + 1}`, availableItems)
+    ])))
+  };
+  const iniFields = {
+    'general.name': { label: 'Continue-screen name', name: true, fileLine: 1 },
+    'general.love': { ...stats[2], label: 'Continue-screen LV', fileLine: 2 },
+    'general.kills': { ...counts[12], label: 'Persistent kill count', fileLine: 12 },
+    'general.room': { ...definitions[548], label: 'Continue-screen room', fileLine: 548 },
+    'general.time': integer('Continue-screen time (frames)', 0, 2147483647),
+    'general.fun': { ...flags[36], fileLine: 36 },
+    'general.gameover': integer('Times died', 0, 999999),
+    'general.won': choice('Prior Neutral completion', offOn, 'Used by later route events.'),
+    'general.tale': choice('New Home story flag', offOn)
+  };
+  const rooms = { 6: 'Ruins · Entrance', 12: 'Ruins · Leaf Pile', 18: 'Ruins · Mouse Hole', 31: 'Ruins · Home', 45: 'Snowdin · Box Road', 55: 'Snowdin · Spaghetti', 60: 'Snowdin · Dog House', 66: 'Snowdin · Town' };
+  const routes = { any: 'Inspect only', pacifist: 'Pacifist', neutral: 'Neutral', genocide: 'Genocide' };
+  const checkpoints = [
+    { id: 'ruins', area: 'Ruins', title: 'Ruins Entrance', route: 'Open route', room: 6, description: 'The first SAVE point, before the Ruins puzzles.' },
+    { id: 'leaf', area: 'Ruins', title: 'Leaf Pile', route: 'Open route', room: 12, description: 'After Toriel gives you the cellphone.' },
+    { id: 'snowdin', area: 'Snowdin', title: 'Snowdin Town', route: 'Pacifist / Neutral', room: 66, description: 'The town SAVE point before facing Papyrus.' },
+    { id: 'snowdin-g', area: 'Snowdin', title: 'Snowdin Town', route: 'Genocide', room: 66, description: 'A separate capture for the Genocide route before Papyrus.' },
+    { id: 'waterfall', area: 'Waterfall', title: 'Quiet Area', route: 'Pacifist / Neutral', description: 'The SAVE point near the ghost houses and snail farm.' },
+    { id: 'waterfall-g', area: 'Waterfall', title: 'Before Undyne', route: 'Genocide', description: 'A Waterfall capture before the route-specific fight.' },
+    { id: 'hotland', area: 'Hotland / CORE', title: 'Laboratory Entrance', route: 'Pacifist / Neutral', description: 'The SAVE point outside Alphys’s lab.' },
+    { id: 'core', area: 'Hotland / CORE', title: 'CORE End', route: 'Neutral', description: 'The last CORE SAVE point before the next major encounter.' },
+    { id: 'home', area: 'New Home', title: 'Last Corridor', route: 'Neutral', description: 'A New Home SAVE point before the judgment scene.' },
+    { id: 'home-g', area: 'New Home', title: 'Last Corridor', route: 'Genocide', description: 'A route-specific capture before the corridor fight.' }
+  ];
+  const checkpointRoutes = { any: 'Open route', pacifist: 'Pacifist', neutral: 'Neutral', genocide: 'Genocide' };
+
+  function checkpointSpec(record) {
+    const milestone = checkpoints.find(spec => spec.id === record?.id);
+    if (milestone) return milestone;
+    const custom = record?.custom;
+    if (!/^custom-[a-f0-9]{32}$/.test(record?.id) || !custom ||
+        typeof custom.title !== 'string' || !custom.title.trim() || custom.title.length > 70 ||
+        typeof custom.description !== 'string' || custom.description.length > 180 ||
+        !checkpoints.some(spec => spec.area === custom.area) || !Object.hasOwn(checkpointRoutes, custom.target)) {
+      throw new Error('Choose a valid checkpoint name, area and route.');
+    }
+    return { id: record.id, title: custom.title, area: custom.area, description: custom.description,
+      route: checkpointRoutes[custom.target], target: custom.target };
+  }
+
+  function validateCheckpoint(record) {
+    const spec = checkpointSpec(record);
+    if (!['draft', 'player-tested'].includes(record.validation) ||
+        typeof record.version !== 'string' || !record.version.trim() || record.version.length > 70 ||
+        typeof record.save !== 'string' || typeof record.ini !== 'string' || typeof record.limitations !== 'string') {
+      throw new Error('This checkpoint needs a PC version, validation status and both save files.');
+    }
+    return parseCheckpointPair(record, spec);
+  }
+
+  function instantiatePreset(preset) {
+    if (preset?.validation !== 'community-capture' || typeof preset.save !== 'string' || typeof preset.ini !== 'string' ||
+        !Number.isInteger(preset.room) || !Object.hasOwn(checkpointRoutes, preset.target)) {
+      throw new Error('The bundled checkpoint data is incomplete.');
+    }
+    const { save, ini } = parseCheckpointPair(preset, preset);
+    const names = ini.byKey.get('general.name');
+    if (names?.length !== 1) {
+      throw new Error('The bundled checkpoint must have exactly one Continue-screen name.');
+    }
+    const saveChanges = new Map();
+    const iniChanges = new Map();
+    patchSave(save, saveChanges, 1, DEFAULT_PLAYER_NAME);
+    patchIni(ini, iniChanges, names[0], DEFAULT_PLAYER_NAME);
+    return parseCheckpointPair({
+      save: serialize(save, saveChanges),
+      ini: serialize(ini, iniChanges, true)
+    }, preset);
+  }
+
+  function parseCheckpointPair(record, spec) {
+    const encoder = new TextEncoder();
+    if ([record.save, record.ini].some(text => encoder.encode(text).length > MAX_BYTES)) {
+      throw new Error('A checkpoint file exceeds the 128 KiB limit.');
+    }
+    const save = parseSave(record.save);
+    const ini = parseIni(record.ini);
+    const room = Number(originalValue(save, 548));
+    if (spec.room !== undefined && room !== spec.room) {
+      throw new Error(`${spec.title} uses room ${spec.room}. This file0 stores room ${room}.`);
+    }
+    const mirror = ini.byKey.get('general.room');
+    if (mirror?.length !== 1 || !mirror[0].value.trim() || Number(mirror[0].value) !== room) {
+      throw new Error('The Continue screen room in undertale.ini must match file0. Select both files from the same save.');
+    }
+    const target = spec.target ?? ({ Genocide: 'genocide', Neutral: 'neutral' }[spec.route] ?? 'any');
+    const route = report(save, new Map(), ini, new Map(), target);
+    if (route.conflicts.length) throw new Error(`Checkpoint has a conflict. ${route.conflicts[0]}`);
+    return { save, ini, room, spec, target };
+  }
+  const numeric = /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/;
+  const badCharacters = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
+
+  function decode(bytes) {
+    if (bytes.byteLength > MAX_BYTES) throw new Error('This file exceeds the 128 KiB limit for a PC text save.');
+    try {
+      return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
+    } catch {
+      throw new Error('This file is not UTF-8 text. Select a save from the original PC game.');
+    }
+  }
+
+  function splitText(text) {
+    if (!text || badCharacters.test(text)) throw new Error('The file is empty or contains unsupported binary characters.');
+    const bom = text.startsWith('\uFEFF') ? '\uFEFF' : '';
+    const lines = [];
+    for (const match of text.slice(bom.length).matchAll(/([^\r\n]*)(\r\n|\n|\r|$)/g)) {
+      if (match[0]) lines.push({ text: match[1], end: match[2] });
+    }
+    return { original: text, bom, lines };
+  }
+
+  function parseSave(text) {
+    const doc = splitText(text);
+    if (doc.lines.length < MIN_LINES) throw new Error(`Expected at least ${MIN_LINES} lines in file0. Found ${doc.lines.length}.`);
+    if (doc.lines.length > 4096) throw new Error('The save has too many lines for this editor.');
+    if (!doc.lines[0].text.trim() || doc.lines[0].text.length > 80) throw new Error('Line 1 must contain a player name.');
+    for (let line = 2; line <= MIN_LINES; line++) {
+      const value = doc.lines[line - 1].text.trim();
+      if (!numeric.test(value) || !Number.isFinite(Number(value))) {
+        throw new Error(`Line ${line} is not a valid PC save number.`);
+      }
+      if (definitions[line] && !definitions[line].decimal && !Number.isSafeInteger(Number(value))) {
+        throw new Error(`Line ${line} must contain a whole number.`);
+      }
+    }
+    return doc;
+  }
+
+  function parseIni(text) {
+    const doc = splitText(text);
+    const entries = [];
+    const byKey = new Map();
+    let section = '';
+    for (const [index, row] of doc.lines.entries()) {
+      const trimmed = row.text.trim();
+      if (!trimmed || /^[;#]/.test(trimmed)) continue;
+      const header = trimmed.match(/^\[([^\[\]]+)\](?:\s*[;#].*)?$/);
+      if (header) {
+        section = header[1].trim();
+        continue;
+      }
+      const keyValue = row.text.match(/^(\s*([^=\[\]]+?)\s*=)(\s*)(.*)$/);
+      if (!keyValue || !section || !keyValue[2].trim()) throw new Error(`Invalid INI entry on line ${index + 1}. Expected a key inside a section.`);
+      const [, assignment, , padding, tail] = keyValue;
+      const quoted = tail.match(/^(["'])(.*?)\1(\s*(?:[;#].*)?)$/);
+      if (!quoted && /^["']/.test(tail)) throw new Error(`Unclosed or invalid quoted value on INI line ${index + 1}.`);
+      const commentOnly = padding && /^[;#]/.test(tail);
+      const [, value, suffix] = quoted || commentOnly ? [] : tail.match(/^(.*?)(\s+[;#].*|\s*)$/);
+      const key = keyValue[2].trim();
+      const id = `${section.toLowerCase()}.${key.toLowerCase()}`;
+      const entry = {
+        index, section, key, id,
+        value: quoted ? quoted[2] : value ?? '',
+        prefix: assignment + (commentOnly ? '' : padding) + (quoted ? quoted[1] : ''),
+        suffix: quoted ? quoted[1] + quoted[3] : commentOnly ? padding + tail : suffix,
+        quote: quoted?.[1]
+      };
+      entries.push(entry);
+      if (!byKey.has(id)) byKey.set(id, []);
+      byKey.get(id).push(entry);
+    }
+    if (!entries.length || !entries.some(entry => (
+      /^(general|flowey|ffff|toriel|sans|papyrus|undyne|mettaton|alphys|asgore)$/i.test(entry.section)
+    ))) throw new Error('This INI has no recognisable UNDERTALE settings.');
+    return { ...doc, entries, byKey };
+  }
+
+  const originalValue = (doc, line) => doc.lines[line - 1].text.trim();
+  const valueAt = (doc, patches, line) => patches.get(line)?.trim() ?? originalValue(doc, line);
+  const iniValue = (entry, patches) => patches.get(entry.index + 1) ?? entry.value;
+  const sameValue = (definition, a, b) => definition?.name ? a === b : (
+    numeric.test(a.trim()) && numeric.test(b.trim()) ? Number(a) === Number(b) : a === b
+  );
+
+  function validateValue(definition, value) {
+    if (definition.name) return /^[A-Za-z]{1,6}$/.test(value) ? '' : 'Use one to six letters.';
+    if (definition.options) return Object.hasOwn(definition.options, value) ? '' : 'Choose a listed value.';
+    if (definition.decimal) return numeric.test(value) && Math.abs(Number(value)) <= 99999 ? '' : 'Enter a number between −99,999 and 99,999.';
+    const number = Number(value);
+    if (!/^[+-]?\d+$/.test(value) || !Number.isInteger(number) || number < definition.min || number > definition.max) {
+      return `Enter a whole number from ${definition.min.toLocaleString()} to ${definition.max.toLocaleString()}.`;
+    }
+    return '';
+  }
+
+  function patchSave(doc, patches, line, value, raw = false) {
+    const row = doc.lines[line - 1];
+    if (!row) throw new Error('Choose an existing line.');
+    const definition = definitions[line];
+    if (!raw && !definition) throw new Error('Choose an editable field.');
+    if (raw && definition) throw new Error('Edit this documented field using its labelled control.');
+    if (raw && (value.length > 4096 || /[\r\n]/.test(value) || badCharacters.test(value))) throw new Error('Enter a single text line.');
+    if (raw && line <= MIN_LINES && (!numeric.test(value.trim()) || !Number.isFinite(Number(value)))) throw new Error('This line must remain numeric.');
+    if (!raw && sameValue(definition, value, originalValue(doc, line))) return patches.delete(line);
+    const error = !raw && validateValue(definition, value);
+    if (error) throw new Error(error);
+    const replacement = raw ? value : row.text.replace(/^(\s*).*?(\s*)$/, (_, leading, trailing) => leading + value + trailing);
+    if (replacement === row.text) patches.delete(line);
+    else patches.set(line, replacement);
+  }
+
+  function patchIni(doc, patches, entry, value) {
+    if (!doc.entries.includes(entry)) throw new Error('Choose an existing INI entry.');
+    const definition = iniFields[entry.id];
+    if (definition && doc.byKey.get(entry.id).length > 1) throw new Error('This key occurs more than once. The game’s effective value is ambiguous.');
+    if (value === entry.value || (definition && sameValue(definition, value, entry.value))) return patches.delete(entry.index + 1);
+    if (value.length > 4096 || /[\r\n]/.test(value) || badCharacters.test(value)) throw new Error('Enter a single text value.');
+    if (entry.quote ? value.includes(entry.quote) : /^(?:["'\s])|\s$|\s[;#]/.test(value)) throw new Error('The value would change the INI line’s quoting or comment syntax.');
+    const error = definition && validateValue(definition, value);
+    if (error) throw new Error(error);
+    patches.set(entry.index + 1, value);
+  }
+
+  function serialize(doc, patches, ini = false) {
+    if (!patches.size) return doc.original;
+    const entries = ini ? new Map(doc.entries.map(entry => [entry.index + 1, entry])) : null;
+    return doc.bom + doc.lines.map((row, index) => {
+      const line = index + 1;
+      if (!patches.has(line)) return row.text + row.end;
+      const value = patches.get(line);
+      const entry = entries?.get(line);
+      // An empty final line needs a terminator so it still occupies its slot.
+      const end = !entry && !value && !row.end ? doc.lines[index - 1]?.end || '\n' : row.end;
+      return (entry ? entry.prefix + value + entry.suffix : value) + end;
+    }).join('');
+  }
+
+  const murderChecks = [
+    [233, 20, 'Ruins quota (20)', true], [76, 4, 'Toriel was killed'],
+    [83, 1, 'Doggo was killed'], [84, 1, 'Dogamy and Dogaressa were killed'],
+    [85, 1, 'Greater Dog was killed'], [88, 2, 'Snowdrake was killed'],
+    [234, 16, 'Snowdin quota (16)', true], [98, 1, 'Papyrus was killed'],
+    [112, 1, 'Shyren was killed'], [283, 1, 'Glad Dummy was killed'],
+    [235, 18, 'Waterfall quota (18)', true], [282, 1, 'Undyne the Undying was killed'],
+    [433, 1, 'The Royal Guards were killed'], [428, 1, 'Muffet was killed'],
+    [236, 40, 'Hotland / CORE quota (40)', true], [456, 1, 'Mettaton was killed']
+  ];
+  const expLevels = [0, 10, 30, 70, 120, 200, 300, 500, 800, 1200, 1700, 2500, 3500, 5000, 7000, 10000, 15000, 25000, 50000, 99999];
+  const lateItems = { 14: 30, 15: 30, 24: 70, 25: 70, 44: 70, 45: 70, 46: 120, 47: 120, 48: 120, 49: 120, 50: 193, 51: 193, 52: 193, 53: 193, 56: 193, 57: 193, 64: 70 };
+
+  function report(save, changes, ini, iniChanges, target) {
+    const conflicts = [];
+    const warnings = [];
+    const fixable = [];
+    const n = line => Number(valueAt(save, changes, line));
+    const plot = n(543);
+    const lv = n(2);
+    const kills = n(12);
+    const exp = n(10);
+    const override = n(57);
+    const maxHP = n(4);
+    const expectedLV = expLevels.findLastIndex(threshold => exp >= threshold) + 1;
+    const failed = murderChecks.map(([line, value, label, quota]) => ({
+      line, label, passed: quota ? n(line) >= value : n(line) === value
+    }));
+    const firstFailure = failed.findIndex(check => !check.passed);
+    const murderLevel = firstFailure < 0 ? failed.length : firstFailure;
+    const required = plot >= 199 ? 16 : plot >= 120 ? 12 : plot >= 70 ? 8 : plot >= 25 ? 2 : 0;
+    const regional = [233, 234, 235, 236].map(n);
+    const sum = regional.reduce((total, value) => total + value, 0);
+    const killedBoss = [76, 83, 84, 85, 88, 98, 112, 282, 283, 381, 428, 433, 456]
+      .some(line => n(line) === ({ 76: 4, 88: 2 }[line] ?? 1));
+    if (kills < 0 || regional.some(count => count < 0)) conflicts.push('Kill counters cannot be negative.');
+    if (sum > kills) conflicts.push('The regional kill counters add up to more than the total kill count.');
+    if (!kills && killedBoss) conflicts.push('A boss or miniboss is marked killed, but the total kill count is zero.');
+    if (override > 0) warnings.push('A debug murder-level override is active. Normal route progression cannot be inferred from it.');
+    if (n(3) > maxHP) warnings.push(n(3) <= maxHP + 10 ? 'Current HP is above maximum HP. An inn can do this temporarily.' : 'Current HP exceeds the ordinary inn bonus. The game may reduce it.');
+    if (exp < 0) conflicts.push('EXP cannot be negative.');
+    else if (lv !== expectedLV) warnings.push(`The stored EXP normally corresponds to LV ${expectedLV}. The save currently stores LV ${lv}.`);
+    if (lv >= 1 && lv <= 20 && maxHP !== (lv === 20 ? 99 : 16 + 4 * lv)) warnings.push('Maximum HP differs from the usual value for this LV. Battle may recalculate it.');
+    if (changes.has(548)) warnings.push('The spawn room was overridden. Room, entry position and plot can conflict and may cause a crash or a stuck save.');
+    if (changes.has(543)) warnings.push('The raw plot value was changed. Individual events and room state were left as set.');
+    for (const [line, spec] of Object.entries(equipment)) {
+      const expected = spec.ids[n(Number(line))];
+      if (expected === undefined) warnings.push(`${spec.label} has an unrecognised item ID.`);
+      else if (n(spec.bonus) !== expected) warnings.push(`${spec.label} has a nonstandard stat bonus.`);
+    }
+    const allItemLines = [...inventory, ...boxA, ...boxB, 29, 30];
+    const outOfOrder = [...new Set(allItemLines.map(n).filter(id => lateItems[id] > plot))];
+    if (outOfOrder.length) warnings.push(`Ahead of usual story availability: ${outOfOrder.map(id => items[id]).join(', ')}.`);
+    if (allItemLines.some(line => !Object.hasOwn(availableItems, n(line)))) warnings.push('An item slot contains an ID outside the ordinary PC item list. It is preserved unless you edit that slot.');
+    if (inventory.some((line, index) => n(line) === 0 && inventory.slice(index + 1).some(next => n(next) !== 0))) warnings.push('The inventory has an empty slot before a later item. Some in-game menus may skip items after a gap.');
+    if (plot < 30 && boxA.some(line => n(line))) warnings.push('Box A contains items before you normally reach the first Dimensional Box.');
+    if (plot < 127 && boxB.some(line => n(line))) warnings.push('Box B contains items before the normal phone upgrade.');
+    if (!ini) warnings.push('undertale.ini is missing. Persistent history and Continue-screen values could not be checked.');
+    else {
+      for (const [key, definition] of Object.entries(iniFields)) {
+        if (!definition.fileLine) continue;
+        const matches = ini.byKey.get(key);
+        if (matches?.length > 1) {
+          warnings.push(`INI key ${key} appears more than once. Its effective value is ambiguous.`);
+          continue;
+        }
+        if (!matches?.length) continue;
+        const [entry] = matches;
+        const value = valueAt(save, changes, definition.fileLine);
+        if (sameValue(definition, iniValue(entry, iniChanges), value)) continue;
+        warnings.push(`${definition.label} in undertale.ini differs from file0.`);
+        if (!validateValue(definition, value)) fixable.push({ entry, value, label: `Match ${definition.label} to file0` });
+      }
+    }
+    if (target === 'pacifist') {
+      if (kills > 0 || sum > 0 || killedBoss) conflicts.push('Pacifist requires keeping monsters alive. This save records kills or killed encounters.');
+      if (exp > 0 || lv !== 1) conflicts.push('Pacifist normally has zero EXP and LV 1. Changing EXP alone would leave other events as they are.');
+      if (n(381) === 2) conflicts.push('Undyne is recorded as sick. Her friendship event is unavailable in this state.');
+    }
+    if (target === 'genocide') {
+      if (n(58) !== 0) conflicts.push('A key enemy is marked spared. This can abort Genocide.');
+      if (plot >= 120 && n(381) !== 1) conflicts.push('Undyne’s general encounter flag does not record her death after Waterfall.');
+      if (murderLevel < required) conflicts.push(`The plot appears to be past a Genocide gate. First unmet check: ${failed[firstFailure].label}.`);
+      if (n(38) === 1 || n(524) === 12) conflicts.push('The current save records late Pacifist events.');
+    }
+    if (target === 'neutral' && murderLevel >= 16 && n(58) === 0) conflicts.push('The complete Genocide murder-level chain is present, which conflicts with a Neutral target.');
+    const persistentWin = ini?.byKey.get('general.won');
+    if (target === 'pacifist' && plot >= 193 && (!persistentWin || persistentWin.length !== 1 || Number(iniValue(persistentWin[0], iniChanges)) !== 1)) {
+      warnings.push('Prior Neutral completion was not established from the INI. Later Pacifist events may still require it.');
+    }
+    const relevantWarnings = warnings.some(warning => /override|raw plot|persistent history|persistent kill count|prior neutral completion/i.test(warning));
+    const partialMatch = (target === 'pacifist' && plot < 193) ||
+      (target === 'pacifist' && persistentWin?.length === 1 && Number(iniValue(persistentWin[0], iniChanges)) === 1) ||
+      (target === 'neutral' && plot >= 25 && kills > 0 && n(76) !== 4) ||
+      (target === 'neutral' && plot >= 25 && n(76) === 4 && regional[0] < 20) ||
+      (target === 'genocide' && required > 0 && murderLevel >= required);
+    const status = conflicts.length ? 'likely inconsistent' : partialMatch && !relevantWarnings ? 'consistent' : 'not verified';
+    return { status, conflicts, warnings, fixable, murderLevel };
+  }
+
+  const core = { MAX_BYTES, stats, counts, flags, items, equipment, inventory, boxA, boxB, definitions, iniFields,
+    rooms, routes, checkpoints, checkpointRoutes, checkpointSpec, validateCheckpoint, instantiatePreset, decode, parseSave, parseIni, originalValue, valueAt, iniValue,
+    validateValue, patchSave, patchIni, serialize, report };
+  if (typeof module !== 'undefined' && module.exports) module.exports = core;
+  else globalThis.SaveCore = Object.freeze(core);
+})();
+</script>
+<script>globalThis.SavepointPresets = Object.freeze([
+  {
+    "id": "ruins-entrance",
+    "area": "Ruins",
+    "title": "Ruins Entrance",
+    "route": "Open route",
+    "target": "any",
+    "room": 6,
+    "description": "At the first SAVE point, before most Ruins puzzles.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/1dd46e72160cf0d8d5f4c13da2af6a54c2c4211d",
+    "captured": "2015-10-03",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n0 \n10 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n4 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n8 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n0 \n232 \n6 \n13305 ",
+    "ini": "[General]\nRoom=\"6.000000\"\nKills=\"0.000000\"\nTime=\"13305.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n"
+  },
+  {
+    "id": "leaf-pile",
+    "area": "Ruins",
+    "title": "Leaf Pile",
+    "route": "Open route",
+    "target": "any",
+    "room": 12,
+    "description": "At the Leaf Pile SAVE point after receiving Toriel’s phone.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/f24b406e2093be3278c9fc00cc75c5c85ec53ba9",
+    "captured": "2015-10-03",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n0 \n10 \n0 \n4 \n0 \n0 \n0 \n0 \n201 \n0 \n204 \n0 \n205 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n4 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n79 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n202 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n9.2 \n1 \n1 \n1 \n232 \n12 \n22419 ",
+    "ini": "[Flowey]\nMet1=\"1.000000\"\n[General]\nfun=\"1.000000\"\nName=\"Putnam\"\nLove=\"1.000000\"\nTime=\"22419.000000\"\nKills=\"0.000000\"\nRoom=\"12.000000\"\n"
+  },
+  {
+    "id": "snowdin-papyrus",
+    "area": "Snowdin",
+    "title": "Snowdin Town",
+    "route": "Pacifist-compatible",
+    "target": "pacifist",
+    "room": 68,
+    "description": "In town before Papyrus, with zero kills.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/484122cd11d95b24ac5ab53db90f4fbfb5df93c3",
+    "captured": "2015-10-03",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n3 \n10 \n7 \n4 \n0 \n125 \n0 \n1 \n206 \n7 \n0 \n3 \n0 \n11 \n0 \n16 \n0 \n4 \n0 \n21 \n0 \n21 \n0 \n13 \n15 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n23 \n2 \n638 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n7 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n0 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n203 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n67 \n1 \n1 \n1 \n239 \n68 \n104482 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"68.000000\"\nKills=\"0.000000\"\nTime=\"104482.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n"
+  },
+  {
+    "id": "snowdin-genocide",
+    "area": "Snowdin",
+    "title": "Snowdin Town",
+    "route": "Genocide",
+    "target": "genocide",
+    "room": 68,
+    "description": "In town before Papyrus on the Genocide route.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/078cddf090a4c6d0e0996d90ab8cc1ae9324e5e0",
+    "captured": "2015-10-22",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n8 \n48 \n20 \n24 \n5 \n11 \n7 \n4 \n782 \n1300 \n44 \n11 \n206 \n16 \n0 \n16 \n0 \n16 \n0 \n12 \n0 \n21 \n0 \n21 \n0 \n21 \n0 \n14 \n15 \n0 \n0 \n0 \n0 \n0 \n71 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n418 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n4 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n0 \n4 \n0 \n-1 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n203 \n42 \n22 \n17 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n4 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n67 \n1 \n1 \n1 \n239 \n68 \n95459 ",
+    "ini": "[General]\nFun=\"71.000000\"\nName=\"Putnam\"\nLove=\"8.000000\"\nTime=\"95459.000000\"\nKills=\"44.000000\"\nRoom=\"68.000000\"\n[reset]\nreset=\"1.000000\"\n[Flowey]\nalter2=\"1.000000\"\ntruename=\"1.000000\"\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"2.000000\"\nTK=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[Papyrus]\nM1=\"1.000000\"\n"
+  },
+  {
+    "id": "waterfall-quiet",
+    "area": "Waterfall",
+    "title": "Quiet Area",
+    "route": "Pacifist-compatible",
+    "target": "pacifist",
+    "room": 116,
+    "description": "Past the Mad Dummy encounter, by the ghost houses and snail farm.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/0c9377218afbcd5a63c6bccdcfd10d4307ead5e6",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n3 \n10 \n10 \n4 \n0 \n210 \n0 \n7 \n210 \n11 \n206 \n16 \n0 \n21 \n0 \n21 \n0 \n23 \n0 \n31 \n0 \n0 \n0 \n13 \n24 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n2 \n28 \n2 \n1003 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n7 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n204 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n3 \n0 \n0 \n0 \n0 \n0.08 \n-1 \n-1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n117 \n1 \n1 \n1 \n266 \n116 \n218314 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"116.000000\"\nKills=\"0.000000\"\nTime=\"218314.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n"
+  },
+  {
+    "id": "waterfall-undyne",
+    "area": "Waterfall",
+    "title": "Before Undyne",
+    "route": "Genocide",
+    "target": "genocide",
+    "room": 131,
+    "description": "At the SAVE point before the Genocide route’s Undyne fight.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/5006c4b2f5105445724b4e75f3686398c2533d13",
+    "captured": "2015-10-22",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n11 \n60 \n20 \n30 \n7 \n12 \n10 \n4 \n1717 \n1774 \n64 \n11 \n206 \n16 \n0 \n16 \n0 \n16 \n0 \n21 \n0 \n21 \n0 \n23 \n0 \n0 \n0 \n25 \n24 \n0 \n0 \n0 \n0 \n0 \n71 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n561 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n4 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n0 \n4 \n0 \n-1 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n24 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n10 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n2 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n204 \n62 \n22 \n17 \n19 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n4 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n29 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n3 \n8 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n-1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n119 \n1 \n1 \n1 \n267 \n131 \n133635 ",
+    "ini": "[General]\nFun=\"71.000000\"\nName=\"Putnam\"\nLove=\"11.000000\"\nTime=\"133635.000000\"\nKills=\"64.000000\"\nRoom=\"131.000000\"\n[reset]\nreset=\"1.000000\"\n[Flowey]\nalter2=\"1.000000\"\ntruename=\"1.000000\"\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"2.000000\"\nTK=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[Papyrus]\nM1=\"1.000000\"\nPK=\"1.000000\"\n"
+  },
+  {
+    "id": "hotland-lab",
+    "area": "Hotland / CORE",
+    "title": "Laboratory Entrance",
+    "route": "Pacifist-compatible",
+    "target": "pacifist",
+    "room": 139,
+    "description": "Outside Alphys’s lab after Waterfall, with zero kills.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/5237812ebd42c38c1ba3f4f12c841877aaea2f71",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n2 \n10 \n10 \n4 \n0 \n254 \n0 \n16 \n210 \n21 \n206 \n21 \n0 \n23 \n0 \n11 \n0 \n7 \n0 \n0 \n0 \n0 \n0 \n45 \n24 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n2 \n33 \n5 \n1330 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n7 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n3 \n0 \n1 \n0 \n0 \n1 \n3 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n204 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n3 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n30 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1500 \n1 \n0 \n2 \n0 \n1 \n3 \n3 \n0 \n0 \n0 \n0.08 \n-1 \n-1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n5 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n3 \n2 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n122 \n1 \n1 \n1 \n298 \n139 \n273894 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"139.000000\"\nKills=\"0.000000\"\nTime=\"273894.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n[Undyne]\nUD=\"1.000000\"\n"
+  },
+  {
+    "id": "core-mettaton",
+    "area": "Hotland / CORE",
+    "title": "CORE End",
+    "route": "Pacifist-compatible",
+    "target": "pacifist",
+    "room": 210,
+    "description": "At the last CORE SAVE point, before Mettaton.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/98ede80e6cff786818847fc0411095ca97399db9",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n2 \n10 \n11 \n4 \n0 \n604 \n0 \n16 \n221 \n21 \n220 \n21 \n210 \n23 \n206 \n11 \n0 \n39 \n0 \n38 \n0 \n0 \n0 \n45 \n46 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n8 \n0 \n2 \n40 \n6 \n1944 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n12 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n3 \n0 \n1 \n0 \n0 \n1 \n3 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n3 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n30 \n24 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1500 \n1 \n0 \n2 \n0 \n1 \n3 \n3 \n0 \n0 \n0 \n0.08 \n-1 \n-1 \n0 \n0 \n0 \n0 \n26 \n2 \n1 \n0 \n1 \n1 \n1 \n0 \n0 \n60 \n2 \n16 \n0 \n10 \n0 \n0 \n2 \n1 \n0 \n0 \n5 \n0 \n1 \n0 \n0 \n0 \n6 \n6 \n0 \n4 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n4 \n1 \n0 \n0 \n0 \n2 \n1 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n3 \n2 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n185 \n1 \n1 \n1 \n295 \n210 \n353136 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"210.000000\"\nKills=\"0.000000\"\nTime=\"353136.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n[Undyne]\nUD=\"1.000000\"\n[Mett]\nO=\"1.000000\"\n"
+  },
+  {
+    "id": "core-genocide",
+    "area": "Hotland / CORE",
+    "title": "CORE End",
+    "route": "Genocide",
+    "target": "genocide",
+    "room": 210,
+    "description": "At the last CORE SAVE point with the Genocide route active.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/f29fc60873c024c4c46c085f973ab4c74b2faa95",
+    "captured": "2015-11-14",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n15 \n76 \n20 \n38 \n17 \n13 \n12 \n4 \n8622 \n3814 \n105 \n11 \n206 \n21 \n0 \n36 \n0 \n61 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n49 \n48 \n0 \n0 \n0 \n0 \n0 \n71 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n623 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n4 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n0 \n4 \n0 \n-1 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n24 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n10 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n2 \n1 \n1 \n1 \n1 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n103 \n22 \n17 \n20 \n40 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n4 \n0 \n1 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n29 \n23 \n47 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n2 \n1 \n1 \n3 \n8 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n99 \n1 \n1 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n10 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n6 \n1 \n4 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n19 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n-1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n185 \n1 \n1 \n1 \n295 \n210 \n182312 ",
+    "ini": "[General]\nFun=\"71.000000\"\nName=\"Putnam\"\nLove=\"15.000000\"\nTime=\"182312.000000\"\nKills=\"105.000000\"\nRoom=\"210.000000\"\nGameover=\"3.000000\"\n[reset]\nreset=\"1.000000\"\n[Flowey]\nalter2=\"1.000000\"\ntruename=\"1.000000\"\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"2.000000\"\nTK=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[Papyrus]\nM1=\"1.000000\"\nPK=\"1.000000\"\n"
+  },
+  {
+    "id": "last-corridor",
+    "area": "New Home",
+    "title": "Last Corridor",
+    "route": "Neutral",
+    "target": "neutral",
+    "room": 231,
+    "description": "Before the judgment scene on a zero-kill run toward the Neutral finale.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/338cdc63207505808cc6a628ac30ba92bba4dc66",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n15 \n10 \n15 \n4 \n0 \n604 \n0 \n16 \n221 \n21 \n220 \n21 \n210 \n23 \n206 \n11 \n0 \n39 \n0 \n0 \n0 \n0 \n0 \n51 \n50 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n5 \n0 \n2 \n40 \n6 \n2026 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n12 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n3 \n0 \n1 \n0 \n0 \n1 \n3 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n3 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n30 \n24 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1500 \n1 \n0 \n2 \n0 \n1 \n3 \n3 \n0 \n0 \n0 \n0.08 \n-1 \n-1 \n0 \n0 \n0 \n0 \n26 \n2 \n1 \n0 \n1 \n1 \n1 \n0 \n0 \n60 \n2 \n16 \n0 \n10 \n0 \n0 \n2 \n1 \n0 \n0 \n5 \n0 \n1 \n0 \n0 \n0 \n6 \n6 \n0 \n4 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n4 \n1 \n0 \n0 \n0 \n2 \n1 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n1 \n0 \n0 \n0 \n2 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n17 \n0 \n1 \n1 \n1 \n1 \n2 \n0 \n1 \n3 \n2 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n199 \n1 \n1 \n1 \n328 \n231 \n386650 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nM1=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"231.000000\"\nKills=\"0.000000\"\nTime=\"386650.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\nTale=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n[Undyne]\nUD=\"1.000000\"\n[Mett]\nO=\"1.000000\"\n[Mettaton]\nBossMet=\"1.000000\"\n[MTT]\nEssayNo=\"1.000000\"\n"
+  },
+  {
+    "id": "last-corridor-genocide",
+    "area": "New Home",
+    "title": "Last Corridor",
+    "route": "Genocide",
+    "target": "genocide",
+    "room": 231,
+    "description": "At the corridor SAVE point before the Genocide route’s fight.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/bd42956b4e23188de5e7572022d409f5aa4e1f4f",
+    "captured": "2015-10-22",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Murder\n19 \n92 \n20 \n46 \n99 \n14 \n99 \n4 \n50000 \n801 \n109 \n61 \n206 \n43 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n43 \n0 \n52 \n53 \n0 \n0 \n0 \n0 \n0 \n54 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n5 \n0 \n0 \n2 \n0 \n813 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n3 \n0 \n4 \n0 \n-1 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n0 \n0 \n24 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n10 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n2 \n0 \n1 \n1 \n1 \n0 \n0 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n109 \n21 \n17 \n21 \n44 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n4 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n7 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n13 \n4 \n3 \n32 \n31 \n32 \n21 \n21 \n21 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n2 \n0 \n1 \n14 \n26 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n99 \n1 \n1 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n10 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n6 \n1 \n4 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n28 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n2 \n2 \n1 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n17 \n0 \n1 \n1 \n1 \n1 \n2 \n0 \n0 \n3 \n2 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n-1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n199 \n1 \n1 \n1 \n300 \n231 \n334963 ",
+    "ini": "[Papyrus]\nPK=\"1.000000\"\nM1=\"1.000000\"\nPS=\"1.000000\"\n[Sans]\nSK=\"2.000000\"\nSS=\"1.000000\"\nIntro=\"36.000000\"\nM1=\"1.000000\"\nMP=\"17.000000\"\nSS2=\"14.000000\"\nF=\"39.000000\"\n[General]\nRoom=\"231.000000\"\nKills=\"109.000000\"\nTime=\"334963.000000\"\nLove=\"19.000000\"\nName=\"Murder\"\nfun=\"54.000000\"\nGameover=\"35.000000\"\n[reset]\nreset=\"1.000000\"\n[Flowey]\nFloweyExplain1=\"1.000000\"\nMet1=\"2.000000\"\ntruename=\"1.000000\"\nalter2=\"1.000000\"\n[Toriel]\nTS=\"1.000000\"\nBscotch=\"2.000000\"\nTK=\"1.000000\"\n"
+  },
+  {
+    "id": "asgore",
+    "area": "New Home",
+    "title": "The End",
+    "route": "Neutral",
+    "target": "neutral",
+    "room": 236,
+    "description": "At the final SAVE point before fighting Asgore.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/02420e6c44738b08c392b52ac9948a461e174db3",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n15 \n10 \n15 \n4 \n0 \n604 \n0 \n16 \n221 \n21 \n220 \n21 \n210 \n23 \n206 \n11 \n0 \n39 \n0 \n0 \n0 \n0 \n0 \n51 \n50 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n5 \n0 \n2 \n40 \n6 \n2078 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n12 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n3 \n0 \n1 \n0 \n0 \n1 \n3 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n3 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n30 \n24 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1500 \n1 \n0 \n2 \n0 \n1 \n3 \n3 \n0 \n0 \n0 \n0.08 \n-1 \n-1 \n0 \n0 \n0 \n0 \n26 \n2 \n1 \n0 \n1 \n1 \n1 \n0 \n0 \n60 \n2 \n16 \n0 \n10 \n0 \n0 \n2 \n1 \n0 \n0 \n5 \n0 \n1 \n0 \n0 \n0 \n6 \n6 \n0 \n4 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n4 \n1 \n0 \n0 \n0 \n2 \n1 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n17 \n0 \n1 \n1 \n1 \n1 \n2 \n0 \n1 \n3 \n2 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n208 \n1 \n1 \n1 \n330 \n236 \n393883 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nMeetLv1=\"1.000000\"\nM1=\"1.000000\"\nEndMet=\"1.000000\"\n[General]\nGameover=\"1.000000\"\nRoom=\"236.000000\"\nKills=\"0.000000\"\nTime=\"393883.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\nTale=\"1.000000\"\n[Flowey]\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n[Undyne]\nUD=\"1.000000\"\n[Mett]\nO=\"1.000000\"\n[Mettaton]\nBossMet=\"1.000000\"\n[MTT]\nEssayNo=\"1.000000\"\n"
+  },
+  {
+    "id": "true-lab",
+    "area": "Hotland / CORE",
+    "title": "True Lab Entrance",
+    "route": "True Pacifist",
+    "target": "pacifist",
+    "room": 246,
+    "description": "Inside the True Lab, after unlocking its entrance.",
+    "game": "UNDERTALE PC",
+    "version": "2015 PC release (exact build unrecorded)",
+    "validation": "community-capture",
+    "source": "https://github.com/Putnam3145/Undertale-Save/tree/7121ad2d584e18b1e47d8bc027036a0795959ce6",
+    "captured": "2015-10-19",
+    "limitations": "Recorded on the 2015 PC release. Savepoint checked the files and route data. Loading on newer builds and reaching a specific ending have not been tested.",
+    "save": "Putnam\n1 \n20 \n20 \n10 \n15 \n10 \n15 \n4 \n0 \n604 \n0 \n16 \n210 \n21 \n221 \n21 \n220 \n23 \n206 \n11 \n0 \n39 \n0 \n0 \n0 \n0 \n0 \n51 \n50 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n2 \n40 \n6 \n2207 \n0 \n1 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n3 \n11 \n5 \n1 \n-1 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n1 \n1 \n1 \n12 \n1 \n0 \n2 \n4 \n-1 \n0 \n0 \n0 \n1 \n0 \n4 \n0 \n0 \n0 \n0 \n24 \n0 \n24 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n1 \n0 \n4 \n2 \n2 \n1 \n0 \n3 \n0 \n1 \n0 \n0 \n1 \n3 \n0 \n0 \n1 \n2 \n1 \n1 \n0 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n1 \n0 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n205 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n3 \n1 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n14 \n3 \n15 \n30 \n24 \n0 \n0 \n0 \n0 \n0 \n999 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1500 \n1 \n0 \n2 \n0 \n1 \n3 \n3 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n26 \n2 \n1 \n0 \n1 \n1 \n1 \n0 \n0 \n60 \n2 \n16 \n0 \n10 \n0 \n0 \n2 \n1 \n0 \n0 \n5 \n0 \n1 \n0 \n0 \n0 \n6 \n6 \n0 \n0 \n1 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n4 \n1 \n0 \n0 \n0 \n2 \n1 \n0 \n1 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n2 \n0 \n1 \n0 \n0 \n0 \n0 \n1 \n1 \n0 \n2 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n17 \n0 \n1 \n1 \n1 \n1 \n2 \n0 \n1 \n3 \n5 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n1 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n11 \n0 \n0 \n5 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n0 \n208 \n1 \n1 \n1 \n385 \n246 \n416702 ",
+    "ini": "[Papyrus]\nM1=\"1.000000\"\nPS=\"1.000000\"\nPD=\"1.000000\"\n[Sans]\nMeetLv1=\"1.000000\"\nM1=\"1.000000\"\nEndMet=\"1.000000\"\n[General]\nGameover=\"2.000000\"\nRoom=\"246.000000\"\nKills=\"0.000000\"\nTime=\"416702.000000\"\nLove=\"1.000000\"\nName=\"Putnam\"\nfun=\"1.000000\"\nTale=\"1.000000\"\nWon=\"1.000000\"\n[Flowey]\nNK=\"1.000000\"\nMet1=\"1.000000\"\n[Toriel]\nBscotch=\"1.000000\"\nTS=\"1.000000\"\n[Undyne]\nUD=\"1.000000\"\n[Mett]\nO=\"1.000000\"\n[Mettaton]\nBossMet=\"1.000000\"\n[MTT]\nEssayNo=\"1.000000\"\n[Asgore]\nKillYou=\"1.000000\"\n[FFFFF]\nF=\"0.000000\"\nP=\"7.000000\"\nE=\"0.000000\"\n[Alphys]\nAD=\"1.000000\"\n"
+  }
+].map(Object.freeze));
+</script>
+<script>(() => {
+  'use strict';
+  const C = globalThis.SaveCore;
+  const presets = globalThis.SavepointPresets;
+  const $ = id => document.getElementById(id);
+  const sections = ['source', 'editor', 'review', 'download'];
+  const STORAGE_KEY = 'savepoint.tested-pc-checkpoints.v1';
+  const names = { save: 'file0', ini: 'undertale.ini' };
+  const imports = { save: null, ini: null };
+  const importErrors = new Map();
+  const invalid = new Map();
+  const controls = new Map();
+  let captures = [];
+  let working = null;
+  let mode = 'import';
+  let step = 1;
+  let busy = false;
+
+  function element(tag, text = '', className = '') {
+    const node = document.createElement(tag);
+    if (text) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  }
+
+  function icon(name) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const use = document.createElementNS(svg.namespaceURI, 'use');
+    svg.setAttribute('class', 'icon');
+    svg.setAttribute('aria-hidden', 'true');
+    use.setAttribute('href', `#${['download', 'undo'].includes(name) ? 'icon-' + name : name}`);
+    svg.append(use);
+    return svg;
+  }
+
+  function button(label, action, style = '', graphic = '') {
+    const node = element('button', '', `button ${style}`.trim());
+    node.type = 'button';
+    if (graphic) node.append(icon(graphic));
+    node.append(label);
+    node.addEventListener('click', action);
+    return node;
+  }
+
+  function message(id, text = '', error = false) {
+    const node = $(id);
+    node.textContent = text;
+    node.classList.toggle('error', error);
+  }
+
+  function download(name, text) {
+    const url = URL.createObjectURL(new Blob([text], { type: 'application/octet-stream' }));
+    const link = element('a');
+    link.href = url;
+    link.download = name;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
+  async function read(file, type) {
+    if (!file || file.name.toLowerCase() !== names[type]) throw new Error(`Choose a file named ${names[type]}.`);
+    if (file.size > C.MAX_BYTES) throw new Error(`${names[type]} exceeds the 128 KiB limit.`);
+    const contents = C.decode(new Uint8Array(await file.arrayBuffer()));
+    return type === 'save' ? C.parseSave(contents) : C.parseIni(contents);
+  }
+
+  function setMode(next) {
+    mode = next;
+    for (const control of document.querySelectorAll('[data-mode]')) control.setAttribute('aria-pressed', String(control.dataset.mode === mode));
+    $('import-panel').hidden = mode !== 'import';
+    $('checkpoint-panel').hidden = mode !== 'checkpoint';
+    if (mode === 'checkpoint') renderCheckpoints();
+    renderStatus();
+  }
+
+  function importFiles(files, typeHint) {
+    if (!files.length || busy) return;
+    const jobs = new Map();
+    const issues = [];
+    for (const file of files) {
+      const type = typeHint ?? Object.keys(names).find(key => names[key] === file.name.toLowerCase());
+      if (!type) {
+        issues.push(file.name.toLowerCase() === 'file9' ? 'file9 is an autosave-related file. Choose file0 instead.' : `Unsupported file “${file.name}”.`);
+      } else if (jobs.has(type)) {
+        jobs.set(type, null);
+      } else {
+        jobs.set(type, file);
+      }
+    }
+    if (!jobs.size) {
+      message('import-message', issues.join(' '), true);
+      return;
+    }
+    busy = true;
+    renderImport();
+    message('import-message', 'Reading files on this device…');
+    const tasks = Array.from(jobs, async ([type, file]) => {
+      try {
+        if (!file) throw new Error(`More than one ${names[type]} was selected. Choose the intended file separately.`);
+        imports[type] = await read(file, type);
+        importErrors.delete(type);
+      } catch (error) {
+        imports[type] = null;
+        importErrors.set(type, error.message);
+      }
+    });
+    Promise.all(tasks).then(() => {
+      busy = false;
+      renderImport();
+      const errors = [...issues, ...importErrors.values()];
+      message('import-message', errors.join(' ') || 'Files loaded. You can download their original copies before continuing.', errors.length > 0);
+    });
+  }
+
+  function renderImport() {
+    const files = $('import-files');
+    const backups = $('source-backups');
+    files.replaceChildren();
+    backups.replaceChildren();
+    for (const [type, name] of Object.entries(names)) {
+      const doc = imports[type];
+      if (doc) {
+        const row = element('li');
+        const clear = button('Remove', () => {
+          imports[type] = null;
+          renderImport();
+          message('import-message');
+        }, 'compact ghost');
+        clear.setAttribute('aria-label', `Remove ${name}`);
+        row.append(icon('check'), element('code', name), clear);
+        files.append(row);
+        backups.append(button(`Backup ${name}`, () => download(`${name}.backup`, doc.original), 'compact ghost', 'download'));
+      } else if (importErrors.has(type)) {
+        const row = element('li');
+        row.append(element('code', name), element('span', 'Rejected', 'tag'));
+        if (type === 'ini') row.append(button('Continue without INI', () => {
+          importErrors.delete('ini');
+          renderImport();
+          message('import-message', imports.save ? 'Only file0 will be edited.' : '');
+        }, 'compact ghost'));
+        files.append(row);
+      }
+    }
+    for (const id of ['pick-save', 'pick-ini']) $(id).disabled = busy;
+    $('start-edit').disabled = busy || !imports.save || importErrors.size > 0;
+    renderStatus();
+  }
+
+  function renderStatus() {
+    const current = step === 1 ? (mode === 'import' ? imports : null) : working;
+    const loaded = Boolean(current?.save);
+    $('status-title').textContent = loaded ? 'Save ready' : mode === 'checkpoint' ? 'Checkpoint catalog' : 'Ready for a save';
+    $('status-text').textContent = step > 1 && working ? (
+      `${working.label} · ${working.saveChanges.size + working.iniChanges.size} changed lines`
+    ) : loaded ? 'Your original files are available to download before editing.' : mode === 'checkpoint' ? 'Choose a checkpoint to create file0 and undertale.ini on this device.' : 'Import file0 to unlock the editor. Add undertale.ini to check persistent data.';
+    $('status-save').textContent = loaded ? 'Loaded' : 'Waiting';
+    $('status-ini').textContent = current?.ini ? 'Loaded' : 'Optional';
+    $('status-save').classList.toggle('loaded', loaded);
+    $('status-ini').classList.toggle('loaded', Boolean(current?.ini));
+  }
+
+  function readCaptures() {
+    try {
+      const entries = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
+      if (!Array.isArray(entries)) return [];
+      return entries.filter(record => {
+        try {
+          C.validateCheckpoint(record);
+          return true;
+        } catch {
+          return false;
+        }
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  function persistCaptures() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(captures));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function renderCheckpoints() {
+    renderPresets();
+    const list = $('checkpoint-list');
+    list.replaceChildren();
+    const builtIn = C.checkpoints.map(spec => ({ spec, record: captures.find(entry => entry.id === spec.id) }));
+    const custom = captures.filter(entry => entry.id.startsWith('custom-')).map(record => ({ spec: C.checkpointSpec(record), record }));
+    for (const { spec, record } of [...custom, ...builtIn]) {
+      if ($('area-filter').value && $('area-filter').value !== spec.area) continue;
+      const filter = $('route-filter').value;
+      if (filter && !spec.route.toLowerCase().includes(filter === 'any' ? 'open route' : filter)) continue;
+      const row = element('article', '', 'checkpoint');
+      const copy = element('div');
+      copy.append(element('p', `${spec.area} / ${spec.route}`, 'eyebrow'), element('h3', spec.title), element('p', spec.description));
+      row.append(copy);
+      if (record) {
+        const data = C.validateCheckpoint(record);
+        const tested = record.validation === 'player-tested';
+        const readLine = line => C.originalValue(data.save, line);
+        copy.append(element('p', `${tested ? 'Player-tested' : 'Draft · In-game test pending'} · ${record.version}`),
+          element('p', `Room ${data.room} · ${readLine(1)} · LV ${readLine(2)} · ${readLine(3)}/${readLine(4)} HP`),
+          element('p', record.limitations));
+        const actions = element('div', '', 'button-row');
+        if (tested) actions.append(button('Use checkpoint', () => {
+          start(data.save, data.ini, `${spec.title} · player-tested checkpoint`, data.target, record);
+        }, 'compact', 'arrow'));
+        actions.append(button('Remove', () => {
+          captures = captures.filter(capture => capture !== record);
+          const saved = persistCaptures();
+          renderCheckpoints();
+          $('area-filter').focus();
+          message('checkpoint-message', saved ? 'Capture removed.' : 'Capture removed from this session.');
+        }, 'compact ghost'));
+        row.append(actions);
+        if (!tested) copy.append(checkpointTest(record, spec));
+      } else {
+        const tag = element('span', 'Unsupported', 'tag');
+        tag.title = 'No in-game tested capture is available for this milestone.';
+        row.append(tag);
+      }
+      list.append(row);
+    }
+    if (!list.childElementCount) list.append(element('p', 'No milestones match these filters.', 'help-text'));
+  }
+
+  function renderPresets() {
+    const list = $('checkpoint-presets');
+    list.replaceChildren();
+    const area = $('area-filter').value;
+    const route = $('route-filter').value;
+    for (const preset of presets) {
+      if ((area && preset.area !== area) || (route && preset.target !== route)) continue;
+      const card = element('article', '', 'checkpoint');
+      const copy = element('div');
+      copy.append(element('p', `${preset.area} / ${preset.route}`, 'eyebrow'),
+        element('h3', preset.title), element('p', preset.description));
+      const generate = button('Generate save', () => {
+        try {
+          const data = C.instantiatePreset(preset);
+          message('checkpoint-message');
+          start(data.save, data.ini, `${preset.title} · ${preset.route} · Community save`, data.target, preset);
+        } catch (error) {
+          message('checkpoint-message', error.message, true);
+        }
+      }, 'compact primary', 'arrow');
+      generate.setAttribute('aria-label', `Generate save: ${preset.title}, ${preset.route}`);
+      card.append(copy, generate);
+      list.append(card);
+    }
+    if (!list.childElementCount) list.append(element('p', 'No bundled checkpoints match these filters.', 'help-text'));
+  }
+
+  function checkpointTest(record, spec) {
+    const details = element('details', '', 'advanced');
+    details.append(element('summary', 'Test this checkpoint'));
+    const body = element('div', '', 'details-inner');
+    body.append(element('p', 'Quit the game and back up its whole save folder. Put these two original copies in that folder, then load the game and check the checkpoint. Restore your backup after testing.', 'help-text'));
+    const files = element('div', '', 'button-row');
+    files.append(button('Original file0', () => download('file0', record.save), 'compact ghost', 'download'),
+      button('Original undertale.ini', () => download('undertale.ini', record.ini), 'compact ghost', 'download'));
+    body.append(files);
+    const label = element('label', '', 'checkbox');
+    const check = element('input');
+    check.type = 'checkbox';
+    label.append(check, element('span', 'I loaded this exact pair in the listed PC version and checked the area, stats, inventory, equipment and route continuation.'));
+    const verify = button('Mark as player-tested', () => {
+      if (!check.checked) return;
+      captures = captures.map(entry => entry === record ? { ...record, validation: 'player-tested' } : entry);
+      const saved = persistCaptures();
+      renderCheckpoints();
+      $('area-filter').focus();
+      message('checkpoint-message', `${spec.title} is ready to use${saved ? '.' : ' for this session.'}`);
+    }, 'compact');
+    verify.disabled = true;
+    check.addEventListener('change', () => { verify.disabled = !check.checked; });
+    body.append(label, verify);
+    details.append(body);
+    return details;
+  }
+
+  function renderCustomFields() {
+    const custom = $('capture-point').value === 'custom';
+    $('capture-custom').hidden = !custom;
+    $('capture-name').required = custom;
+  }
+
+  async function addCapture(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('button[type="submit"]');
+    const version = $('capture-version').value.trim();
+    if (!version) {
+      message('capture-message', 'Enter the PC version and platform.', true);
+      return;
+    }
+    submit.disabled = true;
+    try {
+      const selected = $('capture-point').value;
+      const custom = selected === 'custom' ? {
+        title: $('capture-name').value.trim(), area: $('capture-area').value,
+        target: $('capture-route').value, description: $('capture-description').value.trim()
+      } : null;
+      const id = custom ? 'custom-' + Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('') : selected;
+      const [save, ini] = await Promise.all([read($('capture-save').files[0], 'save'), read($('capture-ini').files[0], 'ini')]);
+      const record = {
+        id, custom, game: 'UNDERTALE PC', version, validation: 'draft',
+        limitations: $('capture-limits').value.trim() || 'Later events and endings are outside this checkpoint check.',
+        save: save.original, ini: ini.original
+      };
+      const { spec } = C.validateCheckpoint(record);
+      record.checkpoint = spec.description;
+      record.route = spec.route;
+      if (captures.some(capture => capture.id === id) && !window.confirm(`Replace your saved checkpoint for ${spec.title}?`)) return;
+      captures = [...captures.filter(capture => capture.id !== record.id), record];
+      const saved = persistCaptures();
+      $('area-filter').value = spec.area;
+      $('route-filter').value = '';
+      renderCheckpoints();
+      form.reset();
+      renderCustomFields();
+      message('capture-message', saved ? 'Draft saved. Open Test this checkpoint on its card to continue.' : 'Draft saved for this session. Browser storage was unavailable or full.');
+    } catch (error) {
+      message('capture-message', error.message, true);
+    } finally {
+      submit.disabled = false;
+    }
+  }
+
+  function start(save, ini, label, target = 'any', capture = null) {
+    if (working && ((working.save === save && working.ini === ini) || (capture && capture === working.capture))) return go(2);
+    if (working && working.save === save && !capture) {
+      const iniDraft = [...invalid.keys()].some(key => key.startsWith('ini-'));
+      if ((working.iniChanges.size || iniDraft) && !window.confirm('Replace the INI and discard its draft edits?')) return;
+      working.ini = ini;
+      working.iniChanges = new Map();
+      working.history = working.history.map(previous => ({ ...previous, iniChanges: new Map() }));
+      for (const key of invalid.keys()) {
+        if (key.startsWith('ini-')) invalid.delete(key);
+      }
+      renderEditor();
+      return go(2);
+    }
+    if (working && (working.saveChanges.size || working.iniChanges.size || invalid.size) &&
+        !window.confirm('Start with a different save and discard the current draft edits?')) return;
+    working = { save, ini, label, target, capture, saveChanges: new Map(), iniChanges: new Map(), history: [] };
+    invalid.clear();
+    $('raw-line').value = '9';
+    $('advanced').open = false;
+    renderEditor();
+    go(2);
+  }
+
+  function go(next) {
+    if (next > 1 && !working) return;
+    if (next > 2 && invalid.size) {
+      if (step !== 2) go(2);
+      message('editor-message', 'Fix or restore the marked fields before reviewing.', true);
+      const input = controls.get(invalid.keys().next().value)?.input;
+      for (let node = input?.parentElement; node; node = node.parentElement) {
+        if (node.tagName === 'DETAILS') node.open = true;
+      }
+      input?.focus();
+      return;
+    }
+    step = next;
+    sections.forEach((id, index) => { $(id).hidden = index + 1 !== step; });
+    for (const control of document.querySelectorAll('[data-step]')) {
+      control.disabled = Number(control.dataset.step) > 1 && !working;
+      if (Number(control.dataset.step) === step) control.setAttribute('aria-current', 'step');
+      else control.removeAttribute('aria-current');
+    }
+    if (step === 3) renderReview();
+    if (step === 4) renderDownload();
+    renderStatus();
+    const title = $(`${sections[step - 1]}-title`);
+    title.focus({ preventScroll: true });
+    $('workbench').scrollIntoView({ block: 'start' });
+  }
+
+  function snapshot() {
+    return { saveChanges: new Map(working.saveChanges), iniChanges: new Map(working.iniChanges) };
+  }
+
+  function commit(action) {
+    const old = snapshot();
+    try {
+      action();
+    } catch (error) {
+      Object.assign(working, old);
+      throw error;
+    }
+    const unchanged = Object.keys(old).every(key => (
+      old[key].size === working[key].size && [...old[key]].every(([line, value]) => working[key].get(line) === value)
+    ));
+    if (!unchanged) {
+      working.history.push(old);
+      if (working.history.length > 100) working.history.shift();
+    }
+    refreshControls();
+    renderStatus();
+  }
+
+  function readSave(line) {
+    return C.valueAt(working.save, working.saveChanges, line);
+  }
+
+  function changeSave(line, value) {
+    const definition = C.definitions[line];
+    const previous = readSave(line);
+    C.patchSave(working.save, working.saveChanges, line, value);
+    if (C.equipment[line] && Object.hasOwn(definition.options, value) && Number(previous) !== Number(value)) {
+      const { bonus, ids } = C.equipment[line];
+      C.patchSave(working.save, working.saveChanges, bonus, String(ids[value]));
+      invalid.delete(`save-${bonus}`);
+    }
+  }
+
+  function resetSave(line) {
+    working.saveChanges.delete(line);
+    if (C.equipment[line]) {
+      const bonus = C.equipment[line].bonus;
+      working.saveChanges.delete(bonus);
+      invalid.delete(`save-${bonus}`);
+    }
+  }
+
+  function changeField(key, value, change) {
+    invalid.delete(key);
+    try {
+      commit(() => change(value));
+      message('editor-message');
+    } catch (error) {
+      invalid.set(key, { value, error: error.message });
+      refreshControls();
+    }
+  }
+
+  function displayValue(definition, value) {
+    if (!definition || definition.name || definition.decimal || !value.trim()) return value;
+    return Number.isSafeInteger(Number(value)) ? String(Number(value)) : value;
+  }
+
+  function populateSelect(input, definition, value) {
+    if (input.dataset.current === value) return;
+    const options = Object.entries(definition.options).map(([id, name]) => {
+      const option = element('option', name);
+      option.value = id;
+      return option;
+    });
+    if (!Object.hasOwn(definition.options, value)) {
+      const unsupported = element('option', C.items[value] ? `${C.items[value]} · preserved ID ${value}` : `Unrecognised value · ${value}`);
+      unsupported.value = value;
+      options.unshift(unsupported);
+    }
+    input.replaceChildren(...options);
+    input.dataset.current = value;
+  }
+
+  function field(parent, key, definition, get, change, reset, changed, disabled = false) {
+    const container = element('div');
+    const label = element('label', definition.label);
+    const row = element('div', '', 'control-row');
+    const input = element(definition.options ? 'select' : 'input');
+    const resetButton = button('', () => {
+      invalid.delete(key);
+      commit(reset);
+      input.focus();
+    }, 'compact ghost', 'undo');
+    resetButton.setAttribute('aria-label', `Restore original ${definition.label}`);
+    resetButton.title = `Restore original ${definition.label}`;
+    input.id = key;
+    label.htmlFor = key;
+    input.disabled = disabled;
+    if (input.tagName === 'INPUT') {
+      input.type = 'text';
+      input.autocomplete = 'off';
+      input.spellcheck = false;
+      if (definition.min !== undefined || definition.decimal) input.inputMode = definition.decimal ? 'decimal' : 'numeric';
+    }
+    input.addEventListener('change', () => changeField(key, input.value, change));
+    const help = element('span', definition.help, 'field-help');
+    const error = element('span', '', 'field-error');
+    help.id = `${key}-help`;
+    error.id = `${key}-error`;
+    error.setAttribute('aria-live', 'polite');
+    row.append(input, resetButton);
+    container.append(label, row, help, error);
+    parent.append(container);
+    controls.set(key, { input, definition, get, changed, resetButton, help, error, disabled });
+    return container;
+  }
+
+  function saveField(parent, line) {
+    const definition = C.definitions[line];
+    return field(parent, `save-${line}`, definition, () => readSave(line), value => changeSave(line, value),
+      () => resetSave(line), () => working.saveChanges.has(line) || working.saveChanges.has(C.equipment[line]?.bonus));
+  }
+
+  function iniField(parent, entry) {
+    const original = C.iniFields[entry.id];
+    const duplicate = original && working.ini.byKey.get(entry.id).length > 1;
+    const definition = original ? { ...original, help: duplicate ? 'Duplicate key. The game’s effective value is ambiguous.' : original.help } : {
+      label: `[${entry.section}] ${entry.key}`, help: `INI line ${entry.index + 1} · meaning unknown`
+    };
+    const line = entry.index + 1;
+    field(parent, `ini-${line}`, definition, () => C.iniValue(entry, working.iniChanges),
+      value => C.patchIni(working.ini, working.iniChanges, entry, value),
+      () => working.iniChanges.delete(line), () => working.iniChanges.has(line), Boolean(duplicate));
+  }
+
+  function moveItem(slots, from, to) {
+    const original = [readSave(slots[from]), readSave(slots[to])];
+    try {
+      commit(() => {
+        changeSave(slots[from], String(Number(original[1])));
+        changeSave(slots[to], String(Number(original[0])));
+      });
+      controls.get(`save-${slots[to]}`).input.focus();
+      message('editor-message', `Moved to slot ${to + 1}.`);
+    } catch (error) {
+      message('editor-message', `Could not move these items. ${error.message}`, true);
+    }
+  }
+
+  function slotFields(id, slots) {
+    const parent = $(id);
+    for (const [index, line] of slots.entries()) {
+      const row = saveField(parent, line);
+      const tools = element('div', '', 'slot-tools');
+      const up = button('↑', () => moveItem(slots, index, index - 1), 'compact ghost');
+      const down = button('↓', () => moveItem(slots, index, index + 1), 'compact ghost');
+      up.setAttribute('aria-label', `Move ${C.definitions[line].label} up`);
+      down.setAttribute('aria-label', `Move ${C.definitions[line].label} down`);
+      up.disabled = index === 0;
+      down.disabled = index === slots.length - 1;
+      tools.append(up, down);
+      row.append(tools);
+    }
+  }
+
+  function renderEditor() {
+    $('editor-source').textContent = working.label;
+    $('route-target').value = working.target;
+    controls.clear();
+    const ids = ['stat-fields', 'kill-fields', 'flag-fields', 'equipment-fields', 'inventory-fields', 'boxa-fields', 'boxb-fields', 'ini-fields', 'ini-raw-fields'];
+    for (const id of ids) $(id).replaceChildren();
+    for (const line of Object.keys(C.stats)) saveField($('stat-fields'), Number(line));
+    for (const line of Object.keys(C.counts)) saveField($('kill-fields'), Number(line));
+    for (const line of [548, 543, ...Object.keys(C.flags).map(Number).filter(line => line !== 543)]) saveField($('flag-fields'), line);
+    for (const line of Object.keys(C.equipment)) saveField($('equipment-fields'), Number(line));
+    slotFields('inventory-fields', C.inventory);
+    slotFields('boxa-fields', C.boxA);
+    slotFields('boxb-fields', C.boxB);
+    if (working.ini) {
+      for (const entry of working.ini.entries) iniField($(C.iniFields[entry.id] ? 'ini-fields' : 'ini-raw-fields'), entry);
+      if (!$('ini-fields').childElementCount) $('ini-fields').append(element('p', 'This file has no mapped General keys. See the other INI values in Advanced save data.', 'help-text'));
+      if (!$('ini-raw-fields').childElementCount) $('ini-raw-fields').append(element('p', 'All imported keys have labelled controls.', 'help-text'));
+    } else {
+      $('ini-fields').append(element('p', 'No undertale.ini was supplied. Return to Source to add it before editing persistent values.', 'help-text'));
+      $('ini-raw-fields').append(element('p', 'No undertale.ini was supplied.', 'help-text'));
+    }
+    $('raw-line').max = working.save.lines.length;
+    refreshControls();
+    message('editor-message');
+    message('raw-message');
+  }
+
+  function refreshControls() {
+    for (const [key, control] of controls) {
+      const { input, definition, get, changed, resetButton, help, error, disabled } = control;
+      const issue = invalid.get(key);
+      const value = issue?.value ?? displayValue(definition, get());
+      if (definition.options) populateSelect(input, definition, value);
+      if (input.value !== value) input.value = value;
+      if (issue) input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
+      input.setAttribute('aria-describedby', [help.textContent ? help.id : '', issue ? error.id : ''].filter(Boolean).join(' '));
+      error.textContent = issue?.error ?? '';
+      help.hidden = !help.textContent;
+      error.hidden = !issue;
+      resetButton.disabled = disabled || (!changed() && !issue);
+    }
+    $('undo').disabled = !working.history.length && !invalid.size;
+    $('reset-all').disabled = !working.saveChanges.size && !working.iniChanges.size && !invalid.size;
+    const room = Number(readSave(548));
+    $('room-summary').textContent = `${C.rooms[room] ?? 'Current spawn room'} · ID ${room} · Plot ${readSave(543)}. A tested checkpoint carries its full world state.`;
+    showRaw();
+  }
+
+  function showRaw() {
+    const line = Number($('raw-line').value);
+    const row = working.save.lines[line - 1];
+    const definition = C.definitions[line];
+    $('raw-value').value = row ? working.saveChanges.get(line) ?? row.text : '';
+    $('raw-value').readOnly = !row || Boolean(definition);
+    $('raw-apply').disabled = !row || Boolean(definition);
+    $('raw-reset').disabled = $('raw-apply').disabled || !working.saveChanges.has(line);
+  }
+
+  function applyRaw(reset) {
+    try {
+      const line = Number($('raw-line').value);
+      if ($('raw-apply').disabled) throw new Error('Choose an editable raw line.');
+      const value = $('raw-value').value;
+      commit(() => {
+        if (reset) working.saveChanges.delete(line);
+        else C.patchSave(working.save, working.saveChanges, line, value, true);
+      });
+      message('raw-message', reset ? `Line ${line} restored.` : `Line ${line} applied.`);
+    } catch (error) {
+      message('raw-message', error.message, true);
+    }
+  }
+
+  function undo() {
+    if (invalid.size) {
+      const keys = [...invalid.keys()];
+      invalid.delete(keys.at(-1));
+      message('editor-message', 'Reverted the last invalid entry.');
+    } else {
+      const previous = working.history.pop();
+      if (!previous) return;
+      Object.assign(working, previous);
+      message('editor-message', 'Undid the last edit.');
+    }
+    refreshControls();
+    renderStatus();
+  }
+
+  function makeNotice(title, copy, theme = '') {
+    const notice = element('div', '', `notice ${theme}`.trim());
+    const contents = element('div');
+    contents.append(element('strong', title), element('p', copy));
+    notice.append(icon(theme === 'good' ? 'check' : theme === 'caution' ? 'alert' : 'layers'), contents);
+    return notice;
+  }
+
+  function routeReport() {
+    return C.report(working.save, working.saveChanges, working.ini, working.iniChanges, working.target);
+  }
+
+  function renderReview() {
+    const result = routeReport();
+    const route = $('route-report');
+    const capitalized = result.status[0].toUpperCase() + result.status.slice(1);
+    route.replaceChildren(makeNotice(capitalized, `${C.routes[working.target]} · This report checks documented conditions. Ending and future events still depend on the run.`,
+      result.status === 'consistent' ? 'good' : result.status === 'likely inconsistent' ? 'caution' : ''));
+    for (const [list, className] of [[result.conflicts, 'conflicts'], [result.warnings, '']]) {
+      if (!list.length) continue;
+      const ul = element('ul', '', `report-list ${className}`.trim());
+      ul.append(...list.map(text => element('li', text)));
+      route.append(ul);
+    }
+    if (result.fixable.length) {
+      const fixes = element('div', '', 'button-row');
+      for (const fix of result.fixable) fixes.append(button(fix.label, () => {
+        try {
+          commit(() => C.patchIni(working.ini, working.iniChanges, fix.entry, fix.value));
+          renderReview();
+          $('review-title').focus({ preventScroll: true });
+        } catch (error) {
+          route.append(element('p', error.message, 'form-message error'));
+        }
+      }, 'compact ghost'));
+      route.append(fixes);
+    }
+    const diff = $('diff-report');
+    const changed = working.saveChanges.size + working.iniChanges.size;
+    diff.replaceChildren(element('h3', changed ? `${changed} changed ${changed === 1 ? 'line' : 'lines'}` : 'No changes'));
+    if (!changed) {
+      const bundled = working.capture?.validation === 'community-capture';
+      diff.append(element('p', bundled ? 'Downloads use the checkpoint defaults.' : 'Downloads match the original input files.', 'help-text'));
+      return;
+    }
+    const table = element('table', '', 'diff');
+    table.setAttribute('aria-label', 'Original and edited values');
+    const head = table.createTHead().insertRow();
+    for (const label of ['Field', 'Original', 'Edited']) {
+      const cell = element('th', label);
+      cell.scope = 'col';
+      head.append(cell);
+    }
+    const body = table.createTBody();
+    for (const [line, value] of [...working.saveChanges].sort((a, b) => a[0] - b[0])) {
+      addDiff(body, `file0 · ${C.definitions[line]?.label ?? `Line ${line}`}`, working.save.lines[line - 1].text, value);
+    }
+    for (const entry of working.ini?.entries ?? []) {
+      if (working.iniChanges.has(entry.index + 1)) addDiff(body, `INI · [${entry.section}] ${entry.key}`, entry.value, C.iniValue(entry, working.iniChanges));
+    }
+    diff.append(table);
+  }
+
+  function addDiff(body, label, before, after) {
+    const row = body.insertRow();
+    for (const value of [label, before, after]) row.insertCell().textContent = value || '∅';
+  }
+
+  function renderDownload() {
+    const report = routeReport();
+    const warning = $('download-warning');
+    warning.replaceChildren();
+    if (working.capture?.validation === 'community-capture') {
+      const notice = makeNotice('Community checkpoint', working.capture.limitations, 'caution');
+      const source = element('a', 'View the original save capture');
+      source.href = working.capture.source;
+      source.target = '_blank';
+      source.rel = 'noopener noreferrer';
+      notice.lastElementChild.append(source);
+      warning.append(notice);
+    }
+    if (report.conflicts.length || report.warnings.length) {
+      warning.append(makeNotice('Check the review before applying this save', 'Save edits can change your run or prevent it from loading. Keep a copy of the whole save folder.', 'caution'));
+    }
+    const rows = $('download-files');
+    rows.replaceChildren();
+    for (const [type, name] of Object.entries(names)) {
+      const doc = working[type];
+      const row = element('div', '', 'download-row');
+      const text = element('div');
+      text.append(element('strong', name));
+      row.append(text);
+      if (!doc) {
+        text.append(element('p', 'No input supplied. Keep the INI already in your save folder.'));
+      } else {
+        const changes = working[`${type}Changes`];
+        const bundled = working.capture?.validation === 'community-capture';
+        text.append(element('p', changes.size ? `${changes.size} changed ${changes.size === 1 ? 'line' : 'lines'}` : bundled ? 'Checkpoint bytes' : 'Original bytes'));
+        const actions = element('div', '', 'button-row');
+        if (!bundled || changes.size) {
+          actions.append(button(bundled ? 'Unedited checkpoint' : 'Original backup',
+            () => download(`${name}.backup`, doc.original), 'compact ghost', 'download'));
+        }
+        actions.append(button(`Download ${name}`, () => download(name, C.serialize(doc, changes, type === 'ini')), 'compact primary', 'download'));
+        row.append(actions);
+      }
+      rows.append(row);
+    }
+  }
+
+  for (const control of document.querySelectorAll('[data-mode]')) control.addEventListener('click', () => setMode(control.dataset.mode));
+  for (const control of document.querySelectorAll('[data-step], [data-go]')) control.addEventListener('click', () => go(Number(control.dataset.step ?? control.dataset.go)));
+  for (const type of Object.keys(names)) {
+    const picker = $(`${type}-picker`);
+    $(`pick-${type}`).addEventListener('click', () => picker.click());
+    picker.addEventListener('change', () => {
+      importFiles(Array.from(picker.files), type);
+      picker.value = '';
+    });
+  }
+  const zone = $('drop-zone');
+  for (const type of ['dragenter', 'dragover']) zone.addEventListener(type, event => {
+    if (!Array.from(event.dataTransfer.types).includes('Files')) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    zone.classList.add('drag');
+  });
+  zone.addEventListener('dragleave', event => { if (!zone.contains(event.relatedTarget)) zone.classList.remove('drag'); });
+  zone.addEventListener('drop', event => {
+    event.preventDefault();
+    zone.classList.remove('drag');
+    importFiles(Array.from(event.dataTransfer.files));
+  });
+  for (const type of ['dragover', 'drop']) document.addEventListener(type, event => {
+    if (Array.from(event.dataTransfer.types).includes('Files')) event.preventDefault();
+  });
+  $('start-edit').addEventListener('click', () => start(imports.save, imports.ini, 'Imported PC save'));
+  $('undo').addEventListener('click', undo);
+  $('reset-all').addEventListener('click', () => {
+    invalid.clear();
+    commit(() => {
+      working.saveChanges.clear();
+      working.iniChanges.clear();
+    });
+    message('editor-message', 'Restored all original values.');
+  });
+  $('route-target').addEventListener('change', () => { working.target = $('route-target').value; });
+  $('raw-line').addEventListener('input', () => {
+    showRaw();
+    const line = Number($('raw-line').value);
+    message('raw-message', C.definitions[line] ? `Use the labelled ${C.definitions[line].label} control to edit this line.` : '');
+  });
+  $('raw-apply').addEventListener('click', () => applyRaw(false));
+  $('raw-reset').addEventListener('click', () => applyRaw(true));
+  $('capture-form').addEventListener('submit', addCapture);
+  $('capture-point').addEventListener('change', renderCustomFields);
+  for (const id of ['area-filter', 'route-filter']) $(id).addEventListener('change', renderCheckpoints);
+  for (const area of new Set(C.checkpoints.map(spec => spec.area))) {
+    $('area-filter').append(new Option(area, area));
+    $('capture-area').append(new Option(area, area));
+  }
+  for (const [key, label] of Object.entries(C.checkpointRoutes)) $('capture-route').append(new Option(label, key));
+  for (const key of ['pacifist', 'neutral', 'genocide']) $('route-filter').append(new Option(C.routes[key], key));
+  $('route-filter').append(new Option('Open route', 'any'));
+  for (const spec of C.checkpoints) $('capture-point').append(new Option(`${spec.area} · ${spec.title} (${spec.route})`, spec.id));
+  renderCustomFields();
+  captures = readCaptures();
+  renderImport();
+})();
+</script>
+</body>
+</html>
