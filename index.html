@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#0d0b15">
   <meta name="description" content="A browser-only save editor and checkpoint workbench for the original PC release of UNDERTALE.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-fKWuhQHT9s5IJYHljZ/51zmIyiV85I9WJuReiNCOK8c=' 'sha256-tF8vPT7gPLfO2WzNaL98BVVtzkPNX/2wI6sHJNvDDSE=' 'sha256-yut5no7hrvDuvCsudkGNeoBwAeaJPfd9cEYlYMjj8Gg='; style-src 'sha256-9tte2t2tIN4qMgMbxa0n+7qdu5SG/eykH82t0jFxmr8='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-fr7ycmHYd5P0E1Kfhhsc0OGC5flkAMZLI1+FJcpZc4c=' 'sha256-tF8vPT7gPLfO2WzNaL98BVVtzkPNX/2wI6sHJNvDDSE=' 'sha256-lrSCguoeBT0q0fc7SvGuvyY1SCPvnFTz+Xir4WWBIA8='; style-src 'sha256-9tte2t2tIN4qMgMbxa0n+7qdu5SG/eykH82t0jFxmr8='; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>SAVEPOINT — UNDERTALE Save Editor</title>
   <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzI1MTkzMyIvPgogIDxwYXRoIGQ9Ik0xNCA1aDR2N2gydjJoN3Y0aC03djJoLTJ2N2gtNHYtN2gtMnYtMkg1di00aDd2LTJoMnoiIGZpbGw9IiNmNGNhN2IiLz4KPC9zdmc+Cg==" type="image/svg+xml">
   <style>:root {
@@ -591,9 +591,33 @@ input:disabled { opacity: .65; }
   ];
   const checkpointRoutes = { any: 'Open route', pacifist: 'Pacifist', neutral: 'Neutral', genocide: 'Genocide' };
 
+  function withNeutralCompletion(text) {
+    const doc = parseIni(text);
+    const matches = doc.byKey.get('general.won') ?? [];
+    if (matches.length > 1) throw new Error('The checkpoint INI has duplicate Prior Neutral completion entries.');
+    if (matches.length === 1) {
+      const patches = new Map();
+      patchIni(doc, patches, matches[0], '1.000000');
+      return serialize(doc, patches, true);
+    }
+    const general = doc.lines.findIndex(row => /^\s*\[General\]\s*(?:[;#].*)?$/i.test(row.text));
+    if (general < 0) throw new Error('The checkpoint INI has no [General] section for Prior Neutral completion.');
+    let insertion = doc.lines.findIndex((row, index) => index > general && /^\s*\[[^\]]+\]/.test(row.text));
+    if (insertion < 0) insertion = doc.lines.length;
+    const eol = doc.lines.find(row => row.end)?.end || '\n';
+    if (insertion === doc.lines.length && doc.lines.at(-1)?.end === '') doc.lines.at(-1).end = eol;
+    doc.lines.splice(insertion, 0, { text: 'Won="1.000000"', end: insertion < doc.lines.length ? eol : '' });
+    const normalized = doc.bom + doc.lines.map(row => row.text + row.end).join('');
+    parseIni(normalized);
+    return normalized;
+  }
+
   function checkpointSpec(record) {
     const milestone = checkpoints.find(spec => spec.id === record?.id);
-    if (milestone) return milestone;
+    if (milestone) return {
+      ...milestone,
+      target: milestone.target ?? (/^(?:Pacifist-compatible|True Pacifist|Pacifist)$/i.test(milestone.route) ? 'pacifist' : undefined)
+    };
     const custom = record?.custom;
     if (!/^custom-[a-f0-9]{32}$/.test(record?.id) || !custom ||
         typeof custom.title !== 'string' || !custom.title.trim() || custom.title.length > 70 ||
@@ -641,7 +665,10 @@ input:disabled { opacity: .65; }
       throw new Error('A checkpoint file exceeds the 128 KiB limit.');
     }
     const save = parseSave(record.save);
-    const ini = parseIni(record.ini);
+    const target = spec.target ?? ({ Genocide: 'genocide', Neutral: 'neutral' }[spec.route] ?? 'any');
+    const pacifistCheckpoint = target === 'pacifist' || /pacifist/i.test(spec.route);
+    const iniText = pacifistCheckpoint ? withNeutralCompletion(record.ini) : record.ini;
+    const ini = parseIni(iniText);
     const room = Number(originalValue(save, 548));
     if (spec.room !== undefined && room !== spec.room) {
       throw new Error(`${spec.title} uses room ${spec.room}. This file0 stores room ${room}.`);
@@ -650,7 +677,6 @@ input:disabled { opacity: .65; }
     if (mirror?.length !== 1 || !mirror[0].value.trim() || Number(mirror[0].value) !== room) {
       throw new Error('The Continue screen room in undertale.ini must match file0. Select both files from the same save.');
     }
-    const target = spec.target ?? ({ Genocide: 'genocide', Neutral: 'neutral' }[spec.route] ?? 'any');
     const route = report(save, new Map(), ini, new Map(), target);
     if (route.conflicts.length) throw new Error(`Checkpoint has a conflict. ${route.conflicts[0]}`);
     return { save, ini, room, spec, target };
@@ -1448,7 +1474,7 @@ input:disabled { opacity: .65; }
           message('checkpoint-message', saved ? 'Capture removed.' : 'Capture removed from this session.');
         }, 'compact ghost'));
         row.append(actions);
-        if (!tested) copy.append(checkpointTest(record, spec));
+        if (!tested) copy.append(checkpointTest(data, record, spec));
       } else {
         const tag = element('span', 'Unsupported', 'tag');
         tag.title = 'No in-game tested capture is available for this milestone.';
@@ -1486,14 +1512,14 @@ input:disabled { opacity: .65; }
     if (!list.childElementCount) list.append(element('p', 'No bundled checkpoints match these filters.', 'help-text'));
   }
 
-  function checkpointTest(record, spec) {
+  function checkpointTest(data, record, spec) {
     const details = element('details', '', 'advanced');
     details.append(element('summary', 'Test this checkpoint'));
     const body = element('div', '', 'details-inner');
-    body.append(element('p', 'Quit the game and back up its whole save folder. Put these two original copies in that folder, then load the game and check the checkpoint. Restore your backup after testing.', 'help-text'));
+    body.append(element('p', 'Quit the game and back up its whole save folder. Download these checkpoint files into that folder, then load the game and check the checkpoint. Pacifist checkpoints mark the Neutral ending as completed in undertale.ini. Restore your backup after testing.', 'help-text'));
     const files = element('div', '', 'button-row');
-    files.append(button('Original file0', () => download('file0', record.save), 'compact ghost', 'download'),
-      button('Original undertale.ini', () => download('undertale.ini', record.ini), 'compact ghost', 'download'));
+    files.append(button('Checkpoint file0', () => download('file0', data.save.original), 'compact ghost', 'download'),
+      button('Checkpoint undertale.ini', () => download('undertale.ini', data.ini.original), 'compact ghost', 'download'));
     body.append(files);
     const label = element('label', '', 'checkbox');
     const check = element('input');
